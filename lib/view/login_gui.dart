@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:trabalho_1/components/botao.dart';
 import 'package:trabalho_1/components/quadrado.dart';
 import 'package:trabalho_1/components/textfield.dart';
+import 'package:trabalho_1/view/cadastro_gui.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
@@ -113,22 +114,30 @@ class LoginPage extends StatelessWidget {
               const SizedBox(height: 45),
 
               // Nao possui uma conta
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Não possui uma conta?',
-                    style: TextStyle(color: Colors.grey[700]),
-                  ),
-                  const SizedBox(width: 4),
-                  const Text(
-                    'Cadastre-se',
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontWeight: FontWeight.bold,
+              GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => RegisterPage()),
+                    );
+                  },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Não possui uma conta?',
+                      style: TextStyle(color: Colors.grey[700]),
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 4),
+                    const Text(
+                      'Cadastre-se',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
               )
             ],
           ),
