@@ -26,9 +26,9 @@ class RegisterPage extends StatelessWidget {
               // Logo
               const Icon(
                 Icons.supervised_user_circle,
-                size: 100,
+                size: 115,
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 25),
 
               // Mensagem de bem-vindo
               Text(
@@ -81,7 +81,7 @@ class RegisterPage extends StatelessWidget {
 
               // Botao de cadastro
               MyButton(onTap: (){}, buttonText: "Cadastre-se"),
-              const SizedBox(height: 150),
+              const SizedBox(height: 135),
 
               // Ja possui uma conta
               GestureDetector(
