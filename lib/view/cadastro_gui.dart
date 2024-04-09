@@ -7,9 +7,9 @@ class RegisterPage extends StatelessWidget {
   RegisterPage({super.key});
 
   // controladores dos campos de texto
+  final nomeController = TextEditingController();
   final usuarioController = TextEditingController();
   final senhaController = TextEditingController();
-  final senhaConfirmController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +40,14 @@ class RegisterPage extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
+              // Campo de nome
+              MyTextField(
+                controller: nomeController, 
+                hintText: "Nome", 
+                obscureText: false
+              ),
+              const SizedBox(height: 10),
+
               // Campo de usuario
               MyTextField(
                 controller: usuarioController, 
@@ -52,14 +60,6 @@ class RegisterPage extends StatelessWidget {
               MyTextField(
                 controller: senhaController, 
                 hintText: "Senha", 
-                obscureText: true
-              ),
-              const SizedBox(height: 10),
-
-              // Campo de confirmacao de senha
-              MyTextField(
-                controller: senhaConfirmController, 
-                hintText: "Confirme a senha", 
                 obscureText: true
               ),
               const SizedBox(height: 10),
