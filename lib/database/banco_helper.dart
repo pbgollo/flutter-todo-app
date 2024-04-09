@@ -47,6 +47,7 @@ class BancoHelper {
   }
 
   Future<void> _atualizarBanco(Database db, int oldVersion, int newVersion) async {
+    // Lógica atualizar o banco de dados para versões mais recentes
     if (oldVersion < 2) {
       //Executa comandos  
     }

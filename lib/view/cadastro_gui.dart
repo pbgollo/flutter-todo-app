@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:trabalho_1/components/botao.dart';
@@ -95,9 +95,21 @@ class RegisterPage extends StatelessWidget {
 
                   bool usuarioCadastrado = await _usuarioController.adicionarUsuario(usuario);
                   if (usuarioCadastrado) {
-                    print('Usuário cadastrado com sucesso!');
+                    // Exibe Snackbar de sucesso
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Center(child: Text('Usuário cadastrado com sucesso!')),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
                   } else {
-                    print('Já existe um usuário com esse nome de usuário!');
+                    // Exibe Snackbar de erro
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Center(child: Text('Já existe um usuário com esse nome de usuário!')),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
                   }
                 },
                 buttonText: "Cadastre-se"

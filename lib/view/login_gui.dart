@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:trabalho_1/components/botao.dart';
@@ -80,19 +80,30 @@ class LoginPage extends StatelessWidget {
                 onTap: () async {
                   String nomeUsuario = usuarioController.text;
                   String senha = senhaController.text;
-                  print(usuarioController.text);
-                  print(senhaController.text);
 
                   bool usuarioValido = await _usuarioController.validarUsuario(nomeUsuario, senha);
                   if (usuarioValido) {
-                    print('Usuário autenticado com sucesso!');
+                    // Exibe Snackbar de sucesso
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Center(child: Text('Login bem-sucedido!')),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
                   } else {
-                    print('Credenciais inválidas!');
+                    // Exibe Snackbar de erro
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Center(child: Text('Credenciais inválidas!')),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
                   }
                 }, 
                 buttonText: "Entrar"
               ),
               const SizedBox(height: 40),
+
 
               // Linha continue com
               Padding(

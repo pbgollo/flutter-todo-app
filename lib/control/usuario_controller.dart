@@ -64,7 +64,7 @@ class UsuarioController {
         return null; 
       }
     } catch (e) {
-      print("Erro ao consultar usuário por nome de usuário: $e");
+      print("Erro ao consultar usuário: $e");
       return null;
     }
   }
