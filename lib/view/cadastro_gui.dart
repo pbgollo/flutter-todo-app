@@ -87,29 +87,46 @@ class RegisterPage extends StatelessWidget {
               // Botão de cadastro
               MyButton(
                 onTap: () async {
-                  Usuario usuario = Usuario(
-                    nome: nomeController.text,
-                    usuario: usuarioController.text,
-                    senha: senhaController.text,
-                  );
+                  String nome = nomeController.text;
+                  String nomeUsuario = usuarioController.text;
+                  String senha = senhaController.text;
 
-                  bool usuarioCadastrado = await _usuarioController.adicionarUsuario(usuario);
-                  if (usuarioCadastrado) {
-                    // Exibe Snackbar de sucesso
+                  if (nome.isEmpty || nomeUsuario.isEmpty || senha.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Center(child: Text('Usuário cadastrado com sucesso!')),
-                        backgroundColor: Colors.green,
-                      ),
-                    );
-                  } else {
-                    // Exibe Snackbar de erro
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Center(child: Text('Já existe um usuário com esse nome de usuário!')),
+                        content: Center(child: Text('Preencha todos os campos!')),
                         backgroundColor: Colors.red,
                       ),
                     );
+                  } else {
+                    Usuario usuario = Usuario(
+                      nome: nome,
+                      usuario: nomeUsuario,
+                      senha: senha,
+                    );
+
+                    bool usuarioCadastrado = await _usuarioController.adicionarUsuario(usuario);
+                    if (usuarioCadastrado) {
+                      // Exibe Snackbar de sucesso
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Center(child: Text('Usuário cadastrado com sucesso!')),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                      nomeController.clear();
+                      usuarioController.clear();
+                      senhaController.clear();
+                      Navigator.pop(context);
+                    } else {
+                      // Exibe Snackbar de erro
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Center(child: Text('Já existe um usuário com esse nome de usuário!')),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
                   }
                 },
                 buttonText: "Cadastre-se"

@@ -5,14 +5,15 @@ class SquareTile extends StatelessWidget {
   final Function()? onTap;
 
   const SquareTile({
-    super.key,
+    Key? key,
     required this.onTap, 
     required this.imagePath,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(

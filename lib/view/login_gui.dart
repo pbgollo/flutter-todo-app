@@ -2,10 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:trabalho_1/components/botao.dart';
-import 'package:trabalho_1/components/quadrado.dart';
+import 'package:trabalho_1/components/botao_quadrado.dart';
 import 'package:trabalho_1/components/textfield.dart';
 import 'package:trabalho_1/control/usuario_controller.dart';
+import 'package:trabalho_1/model/usuario.dart';
 import 'package:trabalho_1/view/cadastro_gui.dart';
+import 'package:trabalho_1/view/principal_gui.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
@@ -81,29 +83,45 @@ class LoginPage extends StatelessWidget {
                   String nomeUsuario = usuarioController.text;
                   String senha = senhaController.text;
 
-                  bool usuarioValido = await _usuarioController.validarUsuario(nomeUsuario, senha);
-                  if (usuarioValido) {
-                    // Exibe Snackbar de sucesso
+                  if (nomeUsuario.isEmpty || senha.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Center(child: Text('Login bem-sucedido!')),
-                        backgroundColor: Colors.green,
-                      ),
-                    );
-                  } else {
-                    // Exibe Snackbar de erro
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Center(child: Text('Credenciais inválidas!')),
+                        content: Center(child: Text('Preencha todos os campos!')),
                         backgroundColor: Colors.red,
                       ),
                     );
+                  } else {
+                    bool usuarioValido = await _usuarioController.validarUsuario(nomeUsuario, senha);
+                    if (usuarioValido) {
+                    
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Center(child: Text('Login bem-sucedido!')),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+
+                      Usuario? usuario = await _usuarioController.consultarUsuarioPorNome(nomeUsuario);
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PrincipalPage(usuario: usuario),
+                        ),
+                      );
+
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Center(child: Text('Credenciais inválidas!')),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
                   }
                 }, 
                 buttonText: "Entrar"
               ),
               const SizedBox(height: 40),
-
 
               // Linha continue com
               Padding(
@@ -138,7 +156,14 @@ class LoginPage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SquareTile(onTap:(){}, imagePath: 'lib/images/google.png'),
+                  SquareTile(onTap:(){
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Center(child: Text('Funcionalidade ainda não implementada!')),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }, imagePath: 'lib/images/google.png'),
                 ],
               ),
               const SizedBox(height: 45),

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:trabalho_1/model/usuario.dart';
 
 class PrincipalPage extends StatelessWidget {
-  const PrincipalPage({super.key});
+  final Usuario? usuario;
+
+  const PrincipalPage({super.key, required this.usuario});
 
   @override
   Widget build(BuildContext context) {
