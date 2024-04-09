@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:trabalho_1/view/login_gui.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-void main() {
-  runApp(const MainApp());
+Future main() async {
+
+ sqfliteFfiInit();
+ databaseFactory = databaseFactoryFfi;
+
+ runApp(const MainApp());
 }
 
 class MainApp extends StatelessWidget {

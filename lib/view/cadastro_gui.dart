@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:trabalho_1/components/botao.dart';
 import 'package:trabalho_1/components/textfield.dart';
@@ -84,14 +86,19 @@ class RegisterPage extends StatelessWidget {
 
               // Botão de cadastro
               MyButton(
-                onTap: () {
+                onTap: () async {
                   Usuario usuario = Usuario(
                     nome: nomeController.text,
                     usuario: usuarioController.text,
                     senha: senhaController.text,
                   );
 
-                  _usuarioController.adicionarUsuario(usuario);
+                  bool usuarioCadastrado = await _usuarioController.adicionarUsuario(usuario);
+                  if (usuarioCadastrado) {
+                    print('Usuário cadastrado com sucesso!');
+                  } else {
+                    print('Já existe um usuário com esse nome de usuário!');
+                  }
                 },
                 buttonText: "Cadastre-se"
               ),

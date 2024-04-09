@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:sqflite/sqflite.dart';
 import 'package:trabalho_1/database/banco_helper.dart';
 import 'package:trabalho_1/model/usuario.dart';
@@ -22,7 +24,7 @@ class UsuarioController {
   }
 
   // Método para adicionar um novo usuário ao banco de dados
-  Future<void> adicionarUsuario(Usuario usuario) async {
+  Future<bool> adicionarUsuario(Usuario usuario) async {
     try {
       final Database db = await _bancoHelper.iniciarBanco();
 
@@ -34,11 +36,14 @@ class UsuarioController {
           usuario.toMap(),
           conflictAlgorithm: ConflictAlgorithm.replace,
         );
+      return true;
       } else {
-        print('Já existe um usuário com o mesmo nome de usuário.');
+        print('Já existe um usuário com esse nome de usuário!');
+        return false;
       }
     } catch (e) {
       print("Erro ao adicionar usuário: $e");
+      return false;
     }
   }
 
