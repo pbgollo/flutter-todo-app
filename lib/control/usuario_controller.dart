@@ -23,7 +23,7 @@ class UsuarioController {
     }
   }
 
-  // Método para adicionar um novo usuário ao banco de dados
+  // Método para adicionar um novo usuário
   Future<bool> adicionarUsuario(Usuario usuario) async {
     try {
       final Database db = await _bancoHelper.iniciarBanco();
@@ -38,7 +38,6 @@ class UsuarioController {
         );
       return true;
       } else {
-        print('Já existe um usuário com esse nome de usuário!');
         return false;
       }
     } catch (e) {
@@ -65,7 +64,7 @@ class UsuarioController {
         return null; 
       }
     } catch (e) {
-      print("Erro ao consultar usuário por nome: $e");
+      print("Erro ao consultar usuário por nome de usuário: $e");
       return null;
     }
   }

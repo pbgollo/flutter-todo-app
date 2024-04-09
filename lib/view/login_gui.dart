@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:trabalho_1/components/botao.dart';
 import 'package:trabalho_1/components/quadrado.dart';
@@ -76,18 +78,14 @@ class LoginPage extends StatelessWidget {
               // Botao de login
               MyButton(
                 onTap: () async {
-                  // Obtendo valores dos campos de texto
                   String nomeUsuario = usuarioController.text;
                   String senha = senhaController.text;
 
-                  // Chamando o método validarUsuario
                   bool usuarioValido = await _usuarioController.validarUsuario(nomeUsuario, senha);
                   if (usuarioValido) {
-                    // Faça algo se o usuário for válido, como navegar para outra tela
-                    print('Usuário válido. Acesso permitido.');
+                    print('Usuário autenticado com sucesso!');
                   } else {
-                    // Faça algo se o usuário não for válido, como exibir uma mensagem de erro
-                    print('Usuário ou senha inválidos. Acesso negado.');
+                    print('Credenciais inválidas!');
                   }
                 }, 
                 buttonText: "Entrar"
