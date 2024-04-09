@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:trabalho_1/components/botao.dart';
 import 'package:trabalho_1/components/textfield.dart';
+import 'package:trabalho_1/control/usuario_controller.dart';
+import 'package:trabalho_1/model/usuario.dart';
 import 'package:trabalho_1/view/login_gui.dart';
 
 class RegisterPage extends StatelessWidget {
   RegisterPage({super.key});
 
-  // controladores dos campos de texto
+  // Controladores
   final nomeController = TextEditingController();
   final usuarioController = TextEditingController();
   final senhaController = TextEditingController();
+  final UsuarioController _usuarioController = UsuarioController();
 
   @override
   Widget build(BuildContext context) {
@@ -79,8 +82,19 @@ class RegisterPage extends StatelessWidget {
               ),
               const SizedBox(height: 25),
 
-              // Botao de cadastro
-              MyButton(onTap: (){}, buttonText: "Cadastre-se"),
+              // Botão de cadastro
+              MyButton(
+                onTap: () {
+                  Usuario usuario = Usuario(
+                    nome: nomeController.text,
+                    usuario: usuarioController.text,
+                    senha: senhaController.text,
+                  );
+
+                  _usuarioController.adicionarUsuario(usuario);
+                },
+                buttonText: "Cadastre-se"
+              ),
               const SizedBox(height: 135),
 
               // Ja possui uma conta

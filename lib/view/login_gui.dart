@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:trabalho_1/components/botao.dart';
 import 'package:trabalho_1/components/quadrado.dart';
 import 'package:trabalho_1/components/textfield.dart';
+import 'package:trabalho_1/control/usuario_controller.dart';
 import 'package:trabalho_1/view/cadastro_gui.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
 
-  // controladores dos campos de texto
+  // Controladores
   final usuarioController = TextEditingController();
   final senhaController = TextEditingController();
+  final UsuarioController _usuarioController = UsuarioController();
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +74,24 @@ class LoginPage extends StatelessWidget {
               const SizedBox(height: 25),
 
               // Botao de login
-              MyButton(onTap: (){}, buttonText: "Entrar"),
+              MyButton(
+                onTap: () async {
+                  // Obtendo valores dos campos de texto
+                  String nomeUsuario = usuarioController.text;
+                  String senha = senhaController.text;
+
+                  // Chamando o método validarUsuario
+                  bool usuarioValido = await _usuarioController.validarUsuario(nomeUsuario, senha);
+                  if (usuarioValido) {
+                    // Faça algo se o usuário for válido, como navegar para outra tela
+                    print('Usuário válido. Acesso permitido.');
+                  } else {
+                    // Faça algo se o usuário não for válido, como exibir uma mensagem de erro
+                    print('Usuário ou senha inválidos. Acesso negado.');
+                  }
+                }, 
+                buttonText: "Entrar"
+              ),
               const SizedBox(height: 40),
 
               // Linha continue com

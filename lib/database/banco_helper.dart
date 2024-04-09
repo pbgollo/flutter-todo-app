@@ -3,7 +3,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class BancoHelper {
-  static const arquivoDoBancoDeDados = 'nossoBD.db';
+  static const arquivoDoBancoDeDados = 'nossoBanco.db';
   static const arquivoDoBancoDeDadosVersao = 1;
 
   static const tabelaUsuario = 'usuario';
@@ -12,23 +12,21 @@ class BancoHelper {
   static const colunaUsuarioUsuario = 'usuario';
   static const colunaSenhaUsuario = 'senha';
 
-  static late Database _bancoDeDados;
-
-  iniciarBD() async {
+  Future<Database> iniciarBanco() async {
     String caminhoBD = await getDatabasesPath();
     String path = join(caminhoBD, arquivoDoBancoDeDados);
 
-    _bancoDeDados = await openDatabase(path,
+    return openDatabase(path,
         version: arquivoDoBancoDeDadosVersao, 
-        onCreate: funcaoCriacaoBD, 
-        onUpgrade: atualizarDB, 
-        onDowngrade: downgradeDB);
+        onCreate: criarBanco, 
+        onUpgrade: atualizarBanco, 
+        onDowngrade: downgradeBanco);
   }
 
-  Future funcaoCriacaoBD(Database db, int version) async {
+  Future<void> criarBanco(Database db, int version) async {
     await db.execute('''
         CREATE TABLE $tabelaUsuario (
-          $colunaIdUsuario INTEGER PRIMARY KEY,
+          $colunaIdUsuario INTEGER PRIMARY KEY AUTOINCREMENT,
           $colunaNomeUsuario TEXT NOT NULL,
           $colunaUsuarioUsuario TEXT NOT NULL,
           $colunaSenhaUsuario INTEGER NOT NULL
@@ -36,13 +34,13 @@ class BancoHelper {
       ''');
   }
 
-  Future atualizarDB(Database db, int oldVersion, int newVersion) async {
+  Future<void> atualizarBanco(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < 2) {
       //Executa comandos  
     }
   }
 
-  Future downgradeDB(Database db, int oldVersion, int newVersion) async {
-
+  Future<void> downgradeBanco(Database db, int oldVersion, int newVersion) async {
+    // Lógica para reverter o banco de dados para versões anteriores
   }
 }
