@@ -5,7 +5,7 @@ import 'package:trabalho_1/database/banco_helper.dart';
 import 'package:trabalho_1/model/usuario.dart';
 
 class UsuarioController {
-  final BancoHelper _bancoHelper = BancoHelper(); // Instância do BancoHelper
+  final BancoHelper _bancoHelper = BancoHelper.instance; // Instância do BancoHelper
 
   // Método para validar o usuário
   Future<bool> validarUsuario(String nomeUsuario, String senha) async {
@@ -26,7 +26,7 @@ class UsuarioController {
   // Método para adicionar um novo usuário
   Future<bool> adicionarUsuario(Usuario usuario) async {
     try {
-      final Database db = await _bancoHelper.iniciarBanco();
+      final Database db = await _bancoHelper.database;
 
       final Usuario? usuarioExistente = await consultarUsuarioPorNome(usuario.usuario!);
       
@@ -36,7 +36,7 @@ class UsuarioController {
           usuario.toMap(),
           conflictAlgorithm: ConflictAlgorithm.replace,
         );
-      return true;
+        return true;
       } else {
         return false;
       }
@@ -49,7 +49,7 @@ class UsuarioController {
   // Método para consultar um usuário pelo campo "usuario"
   Future<Usuario?> consultarUsuarioPorNome(String nomeUsuario) async {
     try {
-      final Database db = await _bancoHelper.iniciarBanco();
+      final Database db = await _bancoHelper.database;
 
       List<Map<String, dynamic>> result = await db.query(
         BancoHelper.tabelaUsuario,
@@ -69,4 +69,3 @@ class UsuarioController {
     }
   }
 }
-

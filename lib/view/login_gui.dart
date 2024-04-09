@@ -80,6 +80,8 @@ class LoginPage extends StatelessWidget {
                 onTap: () async {
                   String nomeUsuario = usuarioController.text;
                   String senha = senhaController.text;
+                  print(usuarioController.text);
+                  print(senhaController.text);
 
                   bool usuarioValido = await _usuarioController.validarUsuario(nomeUsuario, senha);
                   if (usuarioValido) {
