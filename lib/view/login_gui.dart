@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:trabalho_1/components/botao.dart';
 import 'package:trabalho_1/components/botao_quadrado.dart';
-import 'package:trabalho_1/components/textfield.dart';
+import 'package:trabalho_1/components/text_field.dart';
 import 'package:trabalho_1/control/usuario_controller.dart';
 import 'package:trabalho_1/model/usuario.dart';
 import 'package:trabalho_1/view/cadastro_gui.dart';
