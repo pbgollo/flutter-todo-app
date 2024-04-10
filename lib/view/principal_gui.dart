@@ -4,11 +4,18 @@ import 'package:trabalho_1/components/todo_item.dart';
 import 'package:trabalho_1/model/tarefa.dart';
 import 'package:trabalho_1/model/usuario.dart';
 
-class PrincipalPage extends StatelessWidget {
-  final Usuario? usuario;
-  final todosList = Tarefa.todoList();
-
+class PrincipalPage extends StatefulWidget {
   PrincipalPage({super.key, required this.usuario});
+
+  final Usuario? usuario;
+
+  @override
+  State<PrincipalPage> createState() => _PrincipalPageState();
+}
+class _PrincipalPageState extends State<PrincipalPage> {
+  
+  final todosList = Tarefa.todoList();
+  final tarefaController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -16,29 +23,31 @@ class PrincipalPage extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
+        scrolledUnderElevation: 0,
         elevation: 0,
         backgroundColor: Colors.grey[200],
         automaticallyImplyLeading: false,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Icon(
-              Icons.menu, 
+            IconButton(
+              icon: const Icon(Icons.menu), 
               color: Colors.black,
-              size:27,
+              onPressed: () {},
             ),
             Text(
-              "Olá ${usuario?.nome ?? ''}!",
+              "Olá ${widget.usuario?.nome ?? ''}!",
                 style: TextStyle(
                   color: Colors.grey[700],
                   fontSize: 18,
+                  fontWeight: FontWeight.w500
                 ),
             ),
-            const Icon(
-              Icons.add_to_photos_outlined, 
+            IconButton(
+              icon: const Icon(Icons.add), 
               color: Colors.black,
-              size:26,
-            )
+              onPressed: () {},
+            ),
           ],
         ),
       ),
@@ -65,8 +74,12 @@ class PrincipalPage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      for (Tarefa tarefa in todosList)
-                        ToDoItem(todo: tarefa),
+                      for (Tarefa tarefa in todosList.reversed)
+                        ToDoItem(
+                          todo: tarefa,
+                          mudarEstado: mudarEstado,
+                          deletarTarefa: deletarTarefa,
+                      ),
                     ],
                   ),
                 ),
@@ -99,8 +112,9 @@ class PrincipalPage extends StatelessWidget {
                       ),],
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const TextField(
-                      decoration: InputDecoration(
+                    child: TextField(
+                      controller: tarefaController,
+                      decoration: const InputDecoration(
                         hintText: "Adicionar nova tarefa",
                         border: InputBorder.none,
                       ),
@@ -113,10 +127,13 @@ class PrincipalPage extends StatelessWidget {
                     right: 20
                   ),
                   child: ElevatedButton(
-                    onPressed: (){},
+                    onPressed: (){
+                      adicionarTarefa(tarefaController.text);
+                    },
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.blueAccent), // Cor do botão quando não pressionado
-                      overlayColor: MaterialStateProperty.all<Color>(Colors.blueAccent), // Cor do botão quando pressionado
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.blueAccent), 
+                      overlayColor: MaterialStateProperty.all<Color>(Colors.blueAccent), 
+                      elevation: MaterialStateProperty.all<double>(10),
                     ),
                     child: const Icon(
                       Icons.add_task, 
@@ -132,4 +149,27 @@ class PrincipalPage extends StatelessWidget {
       ),
     );
   }
+
+  // Altera o estado da tarefa entre feita e não feita
+  void mudarEstado(Tarefa todo){
+    setState(() {
+      todo.estado = !todo.estado;
+    });
+  }
+
+  void deletarTarefa(int id){
+    setState(() {
+      todosList.removeWhere((item) => item.id == id);
+    });
+  }
+
+  void adicionarTarefa(String descricao){
+    if(tarefaController.text.isNotEmpty){
+      setState(() {
+        todosList.add(Tarefa(id: DateTime.now().millisecondsSinceEpoch, descricao: descricao));
+      });
+      tarefaController.clear();
+    }
+  }
+
 }

@@ -3,8 +3,10 @@ import 'package:trabalho_1/model/tarefa.dart';
 
 class ToDoItem extends StatelessWidget {
   final Tarefa todo;
+  final mudarEstado;
+  final deletarTarefa;
 
-  const ToDoItem({super.key, required this.todo});
+  const ToDoItem({super.key, required this.todo, required this.mudarEstado, required this.deletarTarefa});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +14,7 @@ class ToDoItem extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 20),
       child: ListTile(
         onTap: (){
-
+          mudarEstado(todo);
         },
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20)
@@ -48,7 +50,7 @@ class ToDoItem extends StatelessWidget {
             iconSize: 18,
             icon: const Icon(Icons.delete),
             onPressed: (){
-
+              deletarTarefa(todo.id);
             }
           ),
         ),
