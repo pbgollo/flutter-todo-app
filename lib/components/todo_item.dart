@@ -23,7 +23,7 @@ class ToDoItem extends StatelessWidget {
           horizontal: 20, 
           vertical: 5
         ),
-        tileColor: Colors.white,
+        tileColor: todo.estado ? Colors.grey[300]: Colors.white,
         leading: Icon(
           todo.estado ? Icons.check_box: Icons.check_box_outline_blank,
           color: Colors.blueAccent,
@@ -32,8 +32,11 @@ class ToDoItem extends StatelessWidget {
           todo.descricao!,
           style: TextStyle(
             fontSize: 16,
-            color: Colors.black,
+            color: todo.estado? Colors.grey[700] : Colors.black,
             decoration: todo.estado ? TextDecoration.lineThrough : null,
+            decorationThickness: 2,
+            decorationColor: Colors.grey[700],
+            fontStyle: todo.estado ? FontStyle.italic : FontStyle.normal,
           ),
         ),
         trailing: Container(

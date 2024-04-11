@@ -32,7 +32,7 @@ class UsuarioController {
       
       if (usuarioExistente == null) {
         await db.insert(
-          BancoHelper.tabelaUsuario,
+          'usuario',
           usuario.toMap(),
           conflictAlgorithm: ConflictAlgorithm.replace,
         );
@@ -51,9 +51,12 @@ class UsuarioController {
     try {
       final Database db = await _bancoHelper.database;
 
+      // await db.execute('drop table tarefa');
+      // await db.execute('drop table grupo_tarefa');
+
       List<Map<String, dynamic>> result = await db.query(
-        BancoHelper.tabelaUsuario,
-        where: '${BancoHelper.colunaUsuarioUsuario} = ?',
+        'usuario',
+        where: 'usuario = ?',
         whereArgs: [nomeUsuario],
         limit: 1,
       );

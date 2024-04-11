@@ -101,7 +101,7 @@ class LoginPage extends StatelessWidget {
                         ),
                       );
 
-                      Usuario? usuario = await _usuarioController.consultarUsuarioPorNome(nomeUsuario);
+                      Usuario usuario = (await _usuarioController.consultarUsuarioPorNome(nomeUsuario))!;
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(

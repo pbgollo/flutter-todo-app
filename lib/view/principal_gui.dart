@@ -3,22 +3,28 @@ import 'package:trabalho_1/components/search_box.dart';
 import 'package:trabalho_1/components/todo_item.dart';
 import 'package:trabalho_1/model/tarefa.dart';
 import 'package:trabalho_1/model/usuario.dart';
+import 'package:trabalho_1/control/tarefa_controller.dart';
 
 class PrincipalPage extends StatefulWidget {
+  final Usuario usuario;
+
   PrincipalPage({super.key, required this.usuario});
 
-  final Usuario? usuario;
 
   @override
   State<PrincipalPage> createState() => _PrincipalPageState();
 }
 class _PrincipalPageState extends State<PrincipalPage> {
   
-  final todosList = Tarefa.todoList();
-  final tarefaController = TextEditingController();
+  final tarefaTextController = TextEditingController();
+  final TarefaController tarefaController = TarefaController();
+  List<dynamic> todoList = [];
+  
 
   @override
   Widget build(BuildContext context) {
+    buscarTarefas();
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.grey[200],
@@ -36,7 +42,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
               onPressed: () {},
             ),
             Text(
-              "Olá ${widget.usuario?.nome ?? ''}!",
+              "Olá ${widget.usuario.nome ?? ''}!",
                 style: TextStyle(
                   color: Colors.grey[700],
                   fontSize: 18,
@@ -74,7 +80,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
                           ),
                         ),
                       ),
-                      for (Tarefa tarefa in todosList.reversed)
+                      for (Tarefa tarefa in todoList.reversed)
                         ToDoItem(
                           todo: tarefa,
                           mudarEstado: mudarEstado,
@@ -113,7 +119,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: TextField(
-                      controller: tarefaController,
+                      controller: tarefaTextController,
                       decoration: const InputDecoration(
                         hintText: "Adicionar nova tarefa",
                         border: InputBorder.none,
@@ -128,7 +134,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
                   ),
                   child: ElevatedButton(
                     onPressed: (){
-                      adicionarTarefa(tarefaController.text);
+                      adicionarTarefa(tarefaTextController.text);
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(Colors.blueAccent), 
@@ -150,25 +156,50 @@ class _PrincipalPageState extends State<PrincipalPage> {
     );
   }
 
+  void buscarTarefas() {
+    tarefaController.buscarTarefaPorUsuario(widget.usuario).then((value) {
+      setState(() {
+        todoList = value;
+      });
+    }).catchError((error) {
+      // Trate o erro aqui, se necessário
+      print("Erro ao buscar tarefas: $error");
+    });
+  }
+
+
   // Altera o estado da tarefa entre feita e não feita
   void mudarEstado(Tarefa todo){
     setState(() {
-      todo.estado = !todo.estado;
+      tarefaController.mudarEstado(todo).then((success) {
+        print('tarefa marcada/desmarcada');
+        print(todo.id);
+        todo.estado = !todo.estado;
+      });
     });
   }
 
   void deletarTarefa(int id){
     setState(() {
-      todosList.removeWhere((item) => item.id == id);
+      tarefaController.deletarTarefa(id).then((success) {
+        todoList.removeWhere((item) => item.id == id);
+        print('tarefa removida');
+        print(id);
+      });
     });
   }
 
-  void adicionarTarefa(String descricao){
-    if(tarefaController.text.isNotEmpty){
+  void adicionarTarefa(String descricao) {
+    if(tarefaTextController.text.isNotEmpty){
       setState(() {
-        todosList.add(Tarefa(id: DateTime.now().millisecondsSinceEpoch, descricao: descricao));
+        Tarefa tarefa = Tarefa(descricao: descricao, usuario: widget.usuario);
+        tarefaController.adicionarTarefa(tarefa).then((tarefa) {
+          todoList.add(tarefa);
+          print("tarefa adicionada");
+          print(tarefa.id);
+        });
       });
-      tarefaController.clear();
+      tarefaTextController.clear();
     }
   }
 
