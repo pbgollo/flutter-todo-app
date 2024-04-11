@@ -193,11 +193,13 @@ class _PrincipalPageState extends State<PrincipalPage> {
   }
 
   // Altera o estado da tarefa entre feita e não feita
-  void mudarEstado(Tarefa todo){
-    setState(() {
-      tarefaController.mudarEstado(todo).then((success) {
+  void mudarEstado(Tarefa todo) {
+    tarefaController.mudarEstado(todo).then((success) {
+      setState(() {
         todo.estado = !todo.estado;
       });
+    }).catchError((error) {
+      print("Erro ao mudar estado da tarefa: $error");
     });
   }
 
@@ -261,5 +263,5 @@ class _PrincipalPageState extends State<PrincipalPage> {
       ],
     );
   }
-  
+
 }
