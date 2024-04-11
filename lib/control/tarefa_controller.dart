@@ -20,6 +20,7 @@ class TarefaController {
     return true;
   }
 
+  // Método para deletar uma tarefa
   Future<bool> deletarTarefa(int id) async{
     final Database db = await _bancoHelper.database;
     await db.delete(
@@ -30,19 +31,18 @@ class TarefaController {
     return true;
   }
 
-  // Método para adicionar um novo usuário
+  // Método para adicionar uma nova tarefa
   Future<Tarefa> adicionarTarefa(Tarefa tarefa) async {
     final Database db = await _bancoHelper.database;
-    int tarefa_id = await db.insert(
+    int tarefaId = await db.insert(
       'tarefa',
       tarefa.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-
-    return Tarefa(id: tarefa_id,descricao: tarefa.descricao, usuario: tarefa.usuario);
+    return Tarefa(id: tarefaId,descricao: tarefa.descricao, usuario: tarefa.usuario);
   }
 
-  // Método para consultar um usuário pelo campo "usuario"
+  // Método que retorna as tarefas do usuário
   Future<List<Tarefa>> buscarTarefaPorUsuario(Usuario usuario) async {
     try {
       final Database db = await _bancoHelper.database;
@@ -52,7 +52,7 @@ class TarefaController {
         where: 'id_usuario = ?',
         whereArgs: [usuario.id],
       );
-
+      
       List<Tarefa> tarefas = [];
       for (var row in result) {
         Tarefa tarefa = Tarefa(

@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:trabalho_1/components/botao.dart';
+import 'package:trabalho_1/components/botao_login.dart';
 import 'package:trabalho_1/components/text_field.dart';
 import 'package:trabalho_1/control/usuario_controller.dart';
 import 'package:trabalho_1/model/usuario.dart';
@@ -27,14 +27,12 @@ class RegisterPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const SizedBox(height: 25),
-
               // Logo
               const Icon(
                 Icons.supervised_user_circle,
                 size: 115,
               ),
               const SizedBox(height: 25),
-
               // Mensagem de bem-vindo
               Text(
                 "Vamos criar a sua conta!",
@@ -44,7 +42,6 @@ class RegisterPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-
               // Campo de nome
               MyTextField(
                 controller: nomeController, 
@@ -52,7 +49,6 @@ class RegisterPage extends StatelessWidget {
                 obscureText: false
               ),
               const SizedBox(height: 10),
-
               // Campo de usuario
               MyTextField(
                 controller: usuarioController, 
@@ -60,7 +56,6 @@ class RegisterPage extends StatelessWidget {
                 obscureText: false
               ),
               const SizedBox(height: 10),
-
               // Campo de senha
               MyTextField(
                 controller: senhaController, 
@@ -68,8 +63,7 @@ class RegisterPage extends StatelessWidget {
                 obscureText: true
               ),
               const SizedBox(height: 10),
-
-              // Mensagem termos e condicoes
+              // Texto termos e condicoes
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Row(
@@ -83,14 +77,12 @@ class RegisterPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 25),
-
               // Botão de cadastro
               MyButton(
                 onTap: () async {
                   String nome = nomeController.text;
                   String nomeUsuario = usuarioController.text;
                   String senha = senhaController.text;
-
                   if (nome.isEmpty || nomeUsuario.isEmpty || senha.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
@@ -104,10 +96,8 @@ class RegisterPage extends StatelessWidget {
                       usuario: nomeUsuario,
                       senha: senha,
                     );
-
                     bool usuarioCadastrado = await _usuarioController.adicionarUsuario(usuario);
                     if (usuarioCadastrado) {
-                      // Exibe Snackbar de sucesso
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Center(child: Text('Usuário cadastrado com sucesso!')),
@@ -119,7 +109,6 @@ class RegisterPage extends StatelessWidget {
                       senhaController.clear();
                       Navigator.pop(context);
                     } else {
-                      // Exibe Snackbar de erro
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Center(child: Text('Já existe um usuário com esse nome de usuário!')),
@@ -132,8 +121,7 @@ class RegisterPage extends StatelessWidget {
                 buttonText: "Cadastre-se"
               ),
               const SizedBox(height: 135),
-
-              // Ja possui uma conta
+              // Texto já possui uma conta
               GestureDetector(
                 onTap: () {
                   Navigator.push(

@@ -1,14 +1,17 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:trabalho_1/components/search_box.dart';
 import 'package:trabalho_1/components/todo_item.dart';
 import 'package:trabalho_1/model/tarefa.dart';
 import 'package:trabalho_1/model/usuario.dart';
 import 'package:trabalho_1/control/tarefa_controller.dart';
+import 'package:trabalho_1/view/login_gui.dart';
 
 class PrincipalPage extends StatefulWidget {
   final Usuario usuario;
 
-  PrincipalPage({super.key, required this.usuario});
+  const PrincipalPage({super.key, required this.usuario});
 
 
   @override
@@ -19,7 +22,6 @@ class _PrincipalPageState extends State<PrincipalPage> {
   final tarefaTextController = TextEditingController();
   final TarefaController tarefaController = TarefaController();
   List<dynamic> todoList = [];
-  
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +30,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.grey[200],
+      // App bar
       appBar: AppBar(
         scrolledUnderElevation: 0,
         elevation: 0,
@@ -50,9 +53,16 @@ class _PrincipalPageState extends State<PrincipalPage> {
                 ),
             ),
             IconButton(
-              icon: const Icon(Icons.add), 
+              icon: const Icon(Icons.logout), 
               color: Colors.black,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                    MaterialPageRoute(
+                    builder: (context) => LoginPage(),
+                  ),
+                );
+              },
             ),
           ],
         ),
@@ -66,6 +76,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
             ),
             child: Column(
               children: [
+                // Barra de pesquisa
                 const SearchBox(),
                 Expanded(
                   child: ListView(
@@ -80,6 +91,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
                           ),
                         ),
                       ),
+                      // Criação das tarefas
                       for (Tarefa tarefa in todoList.reversed)
                         ToDoItem(
                           todo: tarefa,
@@ -96,6 +108,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
             alignment: Alignment.bottomCenter,
             child: Row(
               children: [
+                // Barra de adicionar nova tarefa
                 Expanded(
                   child: Container(
                     height: 50,
@@ -127,6 +140,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
                     ),
                   ),
                 ),
+                // Botão de adicionar nova tarefa
                 Container(
                   margin: const EdgeInsets.only(
                     bottom: 20,
@@ -156,17 +170,16 @@ class _PrincipalPageState extends State<PrincipalPage> {
     );
   }
 
+  // Busca as tarefas do usuário
   void buscarTarefas() {
     tarefaController.buscarTarefaPorUsuario(widget.usuario).then((value) {
       setState(() {
         todoList = value;
       });
     }).catchError((error) {
-      // Trate o erro aqui, se necessário
       print("Erro ao buscar tarefas: $error");
     });
   }
-
 
   // Altera o estado da tarefa entre feita e não feita
   void mudarEstado(Tarefa todo){
@@ -179,6 +192,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
     });
   }
 
+  // Deleta uma tarefa
   void deletarTarefa(int id){
     setState(() {
       tarefaController.deletarTarefa(id).then((success) {
@@ -189,6 +203,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
     });
   }
 
+  // Adiciona uma tarefa
   void adicionarTarefa(String descricao) {
     if(tarefaTextController.text.isNotEmpty){
       setState(() {

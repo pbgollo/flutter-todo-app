@@ -1,8 +1,8 @@
 // ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:trabalho_1/components/botao.dart';
-import 'package:trabalho_1/components/botao_quadrado.dart';
+import 'package:trabalho_1/components/botao_login.dart';
+import 'package:trabalho_1/components/botao_google.dart';
 import 'package:trabalho_1/components/text_field.dart';
 import 'package:trabalho_1/control/usuario_controller.dart';
 import 'package:trabalho_1/model/usuario.dart';
@@ -28,14 +28,12 @@ class LoginPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const SizedBox(height: 25),
-
               // Logo
               const Icon(
                 Icons.lock,
                 size: 100,
               ),
               const SizedBox(height: 30),
-
               // Mensagem de bem-vindo
               Text(
                 "Seja bem-vindo de volta!",
@@ -45,7 +43,6 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-
               // Campo de usuario
               MyTextField(
                 controller: usuarioController, 
@@ -53,7 +50,6 @@ class LoginPage extends StatelessWidget {
                 obscureText: false
               ),
               const SizedBox(height: 10),
-
               // Campo de senha
               MyTextField(
                 controller: senhaController, 
@@ -61,8 +57,7 @@ class LoginPage extends StatelessWidget {
                 obscureText: true
               ),
               const SizedBox(height: 10),
-
-              // Mensagem esqueci minha senha
+              // Texto esqueci minha senha
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Row(
@@ -76,7 +71,6 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 25),
-
               // Botao de login
               MyButton(
                 onTap: () async {
@@ -92,15 +86,13 @@ class LoginPage extends StatelessWidget {
                     );
                   } else {
                     bool usuarioValido = await _usuarioController.validarUsuario(nomeUsuario, senha);
-                    if (usuarioValido) {
-                    
+                    if (usuarioValido) {              
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Center(child: Text('Login bem-sucedido!')),
                           backgroundColor: Colors.green,
                         ),
                       );
-
                       Usuario usuario = (await _usuarioController.consultarUsuarioPorNome(nomeUsuario))!;
                       Navigator.pushReplacement(
                         context,
@@ -108,7 +100,6 @@ class LoginPage extends StatelessWidget {
                           builder: (context) => PrincipalPage(usuario: usuario),
                         ),
                       );
-
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -122,7 +113,6 @@ class LoginPage extends StatelessWidget {
                 buttonText: "Entrar"
               ),
               const SizedBox(height: 40),
-
               // Linha continue com
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -151,7 +141,6 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 30),
-
               // Botao do google
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -167,8 +156,7 @@ class LoginPage extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 45),
-
-              // Nao possui uma conta
+              // Texto não possui uma conta
               GestureDetector(
                   onTap: () {
                     Navigator.push(

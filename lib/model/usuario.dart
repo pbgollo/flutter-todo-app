@@ -20,7 +20,6 @@ class Usuario {
     };
   }
 
-  // Método para criar um objeto Usuario a partir de um mapa
   static Usuario fromMap(Map<String, dynamic> map) {
     return Usuario(
       id: map['id'] as int?,

@@ -30,16 +30,4 @@ class Tarefa {
       usuario: map['usuario'] as Usuario,
     );
   }
-
-  static List<Tarefa> todoList() {
-    // Usuario usr = Usuario(id: 1);
-    return [
-      // Tarefa(id: 1, descricao: 'Morning Exercise', estado: true ,usuario: usr),
-      // Tarefa(id: 2, descricao: 'Buy Groceries', estado: true ,usuario: usr),
-      // Tarefa(id: 3, descricao: 'Check Emails', usuario: usr),
-      // Tarefa(id: 4, descricao: 'Team Meeting', usuario: usr),
-      // Tarefa(id: 5, descricao: 'Work on mobile apps for 2 hours', usuario: usr),
-      // Tarefa(id: 6, descricao: 'Dinner with Jenny', usuario: usr),
-    ];
-  }
 }

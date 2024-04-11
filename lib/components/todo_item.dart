@@ -10,9 +10,10 @@ class ToDoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Caixa da tarefa
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
-      child: ListTile(
+      child: ListTile( 
         onTap: (){
           mudarEstado(todo);
         },
@@ -24,10 +25,12 @@ class ToDoItem extends StatelessWidget {
           vertical: 5
         ),
         tileColor: todo.estado ? Colors.grey[300]: Colors.white,
+        // CheckBox de feito/não feito
         leading: Icon(
           todo.estado ? Icons.check_box: Icons.check_box_outline_blank,
           color: Colors.blueAccent,
         ),
+        // Descrição da tarefa
         title: Text(
           todo.descricao!,
           style: TextStyle(
@@ -39,6 +42,7 @@ class ToDoItem extends StatelessWidget {
             fontStyle: todo.estado ? FontStyle.italic : FontStyle.normal,
           ),
         ),
+        // Botão de deletar a tarefa
         trailing: Container(
           padding: const EdgeInsets.all(0),
           margin: const EdgeInsets.symmetric(vertical: 12),

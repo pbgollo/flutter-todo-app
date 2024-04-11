@@ -28,6 +28,7 @@ class BancoHelper {
         onDowngrade: _downgradeBanco);
   }
 
+  // Criação do banco e suas tabelas
   Future<void> _criarBanco(Database db, int version) async {
     await db.execute('''
       CREATE TABLE usuario (
@@ -58,7 +59,6 @@ class BancoHelper {
       )
     ''');
     // FOREIGN KEY (id_grupo) REFERENCES grupo(id) ON DELETE CASCADE
-
   }
 
   Future<void> _atualizarBanco(Database db, int oldVersion, int newVersion) async {
@@ -83,8 +83,7 @@ class BancoHelper {
           FOREIGN KEY (id_usuario) REFERENCES usuario(id) ON DELETE CASCADE
         )
       ''');
-          // FOREIGN KEY (id_grupo) REFERENCES grupo(id) ON DELETE CASCADE
-
+      // FOREIGN KEY (id_grupo) REFERENCES grupo(id) ON DELETE CASCADE
     }
   }
 
