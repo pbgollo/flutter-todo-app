@@ -208,20 +208,24 @@ class _PrincipalPageState extends State<PrincipalPage> {
     setState(() {
       tarefaController.deletarTarefa(id).then((success) {
         todoList.removeWhere((item) => item.id == id);
+        todoListFiltrada = todoList;
       });
     });
   }
 
   // Adiciona uma tarefa
   void adicionarTarefa(String descricao) {
-    if(tarefaTextController.text.isNotEmpty){
-      setState(() {
-        Tarefa tarefa = Tarefa(descricao: descricao, usuario: widget.usuario);
-        tarefaController.adicionarTarefa(tarefa).then((tarefa) {
-          todoList.add(tarefa);
+    if (tarefaTextController.text.isNotEmpty) {
+      Tarefa tarefa = Tarefa(descricao: descricao, usuario: widget.usuario);
+      tarefaController.adicionarTarefa(tarefa).then((novaTarefa) {
+        setState(() {
+          todoList.add(novaTarefa);
+          tarefaTextController.clear();
+          todoListFiltrada = todoList;
         });
+      }).catchError((error) {
+        print("Erro ao adicionar tarefa: $error");
       });
-      tarefaTextController.clear();
     }
   }
 
