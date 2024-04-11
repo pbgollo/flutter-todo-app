@@ -70,4 +70,33 @@ class TarefaController {
       return [];
     }
   }
+
+  Future<List<Tarefa>> filtrarTarefas(Usuario usuario, String descricao) async {
+  try {
+    final Database db = await _bancoHelper.database;
+
+    List<Map<String, dynamic>> result = await db.query(
+      'tarefa',
+      where: 'id_usuario = ? AND descricao LIKE ?',
+      whereArgs: [usuario.id, '%$descricao%'], 
+    );
+    
+    List<Tarefa> tarefas = [];
+    for (var row in result) {
+      Tarefa tarefa = Tarefa(
+        id: row['id'] as int,
+        descricao: row['descricao'] as String?,
+        estado: row['estado']==1,
+        usuario: usuario
+      );
+      tarefas.add(tarefa);
+    }        
+    return tarefas;
+
+  } catch (e) {
+    print("Erro ao consultar tarefas: $e");
+    return [];
+  }
+}
+
 }
