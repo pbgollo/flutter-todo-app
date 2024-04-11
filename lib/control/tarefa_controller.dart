@@ -13,7 +13,7 @@ class TarefaController {
     final Database db = await _bancoHelper.database;
     await db.update(
       'tarefa',
-      {'estado':!tarefa.estado},
+      {'estado':tarefa.estado==1?0:1},
       where: 'id =?',
       whereArgs: [tarefa.id],
     );
@@ -58,7 +58,7 @@ class TarefaController {
         Tarefa tarefa = Tarefa(
           id: row['id'] as int,
           descricao: row['descricao'] as String?,
-          estado: row['estado']==1,
+          estado: row['estado'] as int,
           usuario: usuario
         );
         tarefas.add(tarefa);
@@ -86,7 +86,7 @@ class TarefaController {
       Tarefa tarefa = Tarefa(
         id: row['id'] as int,
         descricao: row['descricao'] as String?,
-        estado: row['estado']==1,
+        estado: row['estado'] as int,
         usuario: usuario
       );
       tarefas.add(tarefa);

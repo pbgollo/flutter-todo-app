@@ -19,6 +19,7 @@ class PrincipalPage extends StatefulWidget {
 
 class _PrincipalPageState extends State<PrincipalPage> {
   bool primeira = true;
+  final tarefaPesquisaController = TextEditingController();
   final tarefaTextController = TextEditingController();
   final TarefaController tarefaController = TarefaController();
   List<Tarefa> todoList = [];
@@ -84,6 +85,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
                     borderRadius: BorderRadius.circular(20)
                   ),
                   child: TextField(
+                    controller: tarefaPesquisaController,
                     onChanged: (value) => filtrarTarefas(value),
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.all(0),
@@ -196,7 +198,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
   void mudarEstado(Tarefa todo) {
     tarefaController.mudarEstado(todo).then((success) {
       setState(() {
-        todo.estado = !todo.estado;
+        todo.estado = todo.estado==1?0:1;
       });
     }).catchError((error) {
       print("Erro ao mudar estado da tarefa: $error");
@@ -208,7 +210,12 @@ class _PrincipalPageState extends State<PrincipalPage> {
     setState(() {
       tarefaController.deletarTarefa(id).then((success) {
         todoList.removeWhere((item) => item.id == id);
+        
+      if (tarefaPesquisaController.text.isEmpty){
         todoListFiltrada = todoList;
+      } else {
+        todoListFiltrada = todoList.where((element) => element.descricao!.toLowerCase().contains(tarefaPesquisaController.text.toLowerCase())).toList();
+      }
       });
     });
   }
@@ -239,7 +246,6 @@ class _PrincipalPageState extends State<PrincipalPage> {
     }
     setState(() {
       todoListFiltrada = resultados;
-      print(todoListFiltrada);
     });
   }
 
