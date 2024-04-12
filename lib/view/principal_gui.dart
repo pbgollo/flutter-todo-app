@@ -41,10 +41,14 @@ class _PrincipalPageState extends State<PrincipalPage> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            IconButton(
-              icon: const Icon(Icons.menu), 
-              color: Colors.black,
-              onPressed: () {},
+            Builder(
+              builder: (context) => IconButton(
+                icon: const Icon(Icons.menu),
+                color: Colors.black,
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+              ),
             ),
             Text(
               "Olá ${widget.usuario.nome ?? ''}!",
@@ -69,6 +73,49 @@ class _PrincipalPageState extends State<PrincipalPage> {
           ],
         ),
       ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blueAccent,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.person,
+              color: Colors.white,
+              size: 60,
+            ),
+            SizedBox(height: 8),
+            Text(
+              'Minhas Listas',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+              ),
+            ),
+          ],
+        ),
+      ),
+      ListTile(
+        title: Text('Opção 1'),
+        onTap: () {
+          // Implementação da ação para a opção 1
+        },
+      ),
+      ListTile(
+        title: Text('Opção 2'),
+        onTap: () {
+          // Implementação da ação para a opção 2
+        },
+      ),
+      // Adicione mais ListTile conforme necessário para outras opções
+    ],
+  ),
+),
       body: Stack(
         children: [
           Container(

@@ -40,39 +40,30 @@ class BancoHelper {
     ''');
 
     await db.execute('''
-      CREATE TABLE grupo_tarefa (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nome TEXT NOT NULL,
-        id_usuario INT NOT NULL,
-        FOREIGN KEY (id_usuario) REFERENCES usuario(id) ON DELETE CASCADE
-      )
-    ''');
-
-    await db.execute('''
       CREATE TABLE tarefa (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         descricao TEXT NOT NULL,
         estado INT NOT NULL,
         id_grupo INT, --NOT NULL
         id_usuario INT NOT NULL,
+        FOREIGN KEY (id_usuario) REFERENCES usuario(id) ON DELETE CASCADE,
+        FOREIGN KEY (id_grupo) REFERENCES grupo(id) ON DELETE CASCADE
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE grupo (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nome TEXT NOT NULL,
+        id_usuario INT NOT NULL,
         FOREIGN KEY (id_usuario) REFERENCES usuario(id) ON DELETE CASCADE
       )
     ''');
-    // FOREIGN KEY (id_grupo) REFERENCES grupo(id) ON DELETE CASCADE
   }
 
   Future<void> _atualizarBanco(Database db, int oldVersion, int newVersion) async {
     // Lógica atualizar o banco de dados para versões mais recentes
     if (oldVersion < 2) {
-      await db.execute('''
-        CREATE TABLE grupo_tarefa (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          nome TEXT NOT NULL,
-          id_usuario INT NOT NULL,
-          FOREIGN KEY (id_usuario) REFERENCES usuario(id) ON DELETE CASCADE
-        )
-      ''');
-
       await db.execute('''
         CREATE TABLE tarefa (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -80,10 +71,19 @@ class BancoHelper {
           estado INT NOT NULL,
           id_grupo INT, --NOT NULL
           id_usuario INT NOT NULL,
+          FOREIGN KEY (id_usuario) REFERENCES usuario(id) ON DELETE CASCADE,
+          FOREIGN KEY (id_grupo) REFERENCES grupo(id) ON DELETE CASCADE
+        )
+      ''');
+
+      await db.execute('''
+        CREATE TABLE grupo (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          nome TEXT NOT NULL,
+          id_usuario INT NOT NULL,
           FOREIGN KEY (id_usuario) REFERENCES usuario(id) ON DELETE CASCADE
         )
       ''');
-      // FOREIGN KEY (id_grupo) REFERENCES grupo(id) ON DELETE CASCADE
     }
   }
 
