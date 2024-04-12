@@ -19,11 +19,14 @@ class PrincipalPage extends StatefulWidget {
 
 class _PrincipalPageState extends State<PrincipalPage> {
   bool primeira = true;
+  int? _selectedIndex;
   final tarefaPesquisaController = TextEditingController();
   final tarefaTextController = TextEditingController();
   final TarefaController tarefaController = TarefaController();
   List<Tarefa> todoList = [];
   List<Tarefa> todoListFiltrada = [];
+
+  List<String> itensMenu = ['Lista 1', 'Lista 2', 'Lista 3'];
 
   @override
   Widget build(BuildContext context) {
@@ -73,49 +76,93 @@ class _PrincipalPageState extends State<PrincipalPage> {
           ],
         ),
       ),
+      // Menu bar
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
+          // Alinhamento do ListView
           children: <Widget>[
             const DrawerHeader(
               decoration: BoxDecoration(
                 color: Colors.blueAccent,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.person,
-              color: Colors.white,
-              size: 60,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.list_alt_rounded,
+                    color: Colors.white,
+                    size: 60,
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Minhas Listas',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            SizedBox(height: 8),
-            Text(
-              'Minhas Listas',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
+            // Adicionando os itens do menu
+            for (var i = 0; i < itensMenu.length; i++)
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _selectedIndex = i;
+                  });
+                  // Lista selecionada
+                  print('Item clicado: ${itensMenu[i]}');
+                },
+                child: Container(
+                  color: _selectedIndex == i ? Colors.grey[200] : null,
+                  child: ListTile(
+                    title: Text(itensMenu[i]),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          color: Colors.grey[600],
+                          icon: const Icon(Icons.edit),
+                          onPressed: () {
+                            editarItemMenu(i);
+                          },
+                        ),
+                        IconButton(
+                          color: Colors.red,
+                          icon: const Icon(Icons.delete),
+                          onPressed: () {
+                            deletarItemMenu(i);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            // Botão de adicionar lista
+            Container(
+              alignment: Alignment.centerRight,
+              padding: const EdgeInsets.only(right: 25, bottom: 8, top: 5), // Reduzindo o espaçamento
+              child: SizedBox(
+                width: 46,
+                height: 46,
+                child: FloatingActionButton(
+                  onPressed: () {
+                    adicionarNovaLista();
+                  },
+                  backgroundColor: const Color.fromARGB(255, 147, 212, 74),
+                  child: const Icon(
+                    Icons.add,
+                    size: 24,
+                  ),
+                ),
               ),
             ),
           ],
         ),
       ),
-      ListTile(
-        title: Text('Opção 1'),
-        onTap: () {
-          // Implementação da ação para a opção 1
-        },
-      ),
-      ListTile(
-        title: Text('Opção 2'),
-        onTap: () {
-          // Implementação da ação para a opção 2
-        },
-      ),
-      // Adicione mais ListTile conforme necessário para outras opções
-    ],
-  ),
-),
       body: Stack(
         children: [
           Container(
@@ -321,4 +368,123 @@ class _PrincipalPageState extends State<PrincipalPage> {
     );
   }
 
+  // Função para deletar um item do menu
+  void deletarItemMenu(int index) {
+    setState(() {
+      itensMenu.removeAt(index);
+    });
+  }
+
+  // Função para editar um item do menu
+  void editarItemMenu(int index) {
+    TextEditingController controller = TextEditingController(text: itensMenu[index]);
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.grey[100],
+          title: const Text(
+            'Editar nome da lista',
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w500
+            ),
+          ),
+          content: TextField(
+            controller: controller,
+            decoration: const InputDecoration(
+              labelText: 'Nome',
+              labelStyle: TextStyle(
+                fontSize: 19,
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            ButtonBar(
+              alignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  color: Colors.red, 
+                  iconSize: 36, 
+                  icon: const Icon(Icons.close_rounded), 
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                IconButton(
+                  color: Colors.green, 
+                  iconSize: 36, 
+                  icon: const Icon(Icons.check_rounded), 
+                  onPressed: () {
+                    setState(() {
+                      itensMenu[index] = controller.text;
+                    });
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void adicionarNovaLista() {
+    TextEditingController controller = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.grey[100],
+          title: const Text(
+            'Criar nova lista',
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w500
+            ),
+          ),
+          content: TextField(
+            controller: controller,
+            decoration: const InputDecoration(
+              labelText: 'Nome',
+              labelStyle: TextStyle(
+                fontSize: 19,
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            ButtonBar(
+              alignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  color: Colors.red, 
+                  iconSize: 36, 
+                  icon: const Icon(Icons.close_rounded), 
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                IconButton(
+                  color: Colors.green, 
+                  iconSize: 36, 
+                  icon: const Icon(Icons.check_rounded), 
+                  onPressed: () {
+                    if (controller.text.isNotEmpty) {
+                      setState(() {
+                        itensMenu.add(controller.text);
+                      });
+                    }
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  } 
 }

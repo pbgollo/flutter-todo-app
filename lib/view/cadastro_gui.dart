@@ -29,7 +29,7 @@ class RegisterPage extends StatelessWidget {
               const SizedBox(height: 25),
               // Logo
               const Icon(
-                Icons.supervised_user_circle,
+                Icons.add_reaction_rounded,
                 size: 115,
               ),
               const SizedBox(height: 25),
