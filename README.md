@@ -1,8 +1,8 @@
 # Flutter Calculator
 
-![GitHub repo size](https://img.shields.io/github/repo-size/pbgollo/flutter-calculator?style=for-the-badge)
-![GitHub language count](https://img.shields.io/github/languages/count/pbgollo/flutter-calculator?style=for-the-badge)
-![GitHub forks](https://img.shields.io/github/forks/pbgollo/flutter-calculator?style=for-the-badge)
+![GitHub repo size](https://img.shields.io/github/repo-size/pbgollo/trabalho_mobile_1?style=for-the-badge)
+![GitHub language count](https://img.shields.io/github/languages/count/pbgollo/trabalho_mobile_1?style=for-the-badge)
+![GitHub forks](https://img.shields.io/github/forks/pbgollo/trabalho_mobile_1?style=for-the-badge)
 
 <img src="img.png" alt="Exemplo imagem">
 
@@ -53,26 +53,28 @@ Agradecemos às seguintes pessoas que contribuíram para este projeto:
       </a>
     </td>
     <td align="center">
-      <a href="https://github.com/Schneiderella" title="Perfil da Bárbara no GitHub">
-        <img src="https://avatars.githubusercontent.com/u/110864285" width="100px;" alt="Foto da Bárbara no GitHub"/><br>
+      <a href="https://github.com//pedrin-pedrada" title="Perfil do Pedro Schneider no GitHub">
+        <img src="https://avatars.githubusercontent.com/u/53955622?v=4" width="100px;" alt="Foto do Pedro Schneider no GitHub"/><br>
         <sub>
-          <b>Bárbara Schneider</b>
+          <b>Pedro Schneider</b>
         </sub>
       </a>
     </td>
     <td align="center">
-      <a href="https://github.com/FasterThanM" title="Perfil do Franco no GitHub">
-        <img src="https://avatars.githubusercontent.com/u/129175432" width="100px;" alt="Foto do Franco no GitHub"/><br>
+      <a href="https://github.com/viezzer" title="Perfil do Eduardo Viezzer no GitHub">
+        <img src="https://avatars.githubusercontent.com/u/33733608?v=4" width="100px;" alt="Foto do Viezzer no GitHub"/><br>
         <sub>
-          <b>Franco Michelon</b>
+          <b>Eduardo Viezzer</b>
+        </sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/surviveed" title="Perfil do Francisco no GitHub">
+        <img src="https://avatars.githubusercontent.com/u/107439229?v=4" width="100px;" alt="Foto do Francisco no GitHub"/><br>
+        <sub>
+          <b>Francisco</b>
         </sub>
       </a>
     </td>
   </tr>
 </table>
-
-Após abrir o projeto na sua IDE, execute os seguintes comandos no terminal do projeto:
-```
-flutter clean
-flutter packages get
-```
