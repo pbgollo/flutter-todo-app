@@ -1,13 +1,12 @@
-# Flutter Calculator
+# ToDo List
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/pbgollo/trabalho_mobile_1?style=for-the-badge)
 ![GitHub language count](https://img.shields.io/github/languages/count/pbgollo/trabalho_mobile_1?style=for-the-badge)
 ![GitHub forks](https://img.shields.io/github/forks/pbgollo/trabalho_mobile_1?style=for-the-badge)
 
-<img src="img.png" alt="Exemplo imagem">
+<img src="lib/images/todo.png" alt="Exemplo imagem">
 
-> Este projeto é uma calculadora desenvolvida utilizando o framework Flutter e a linguagem Dart. A calculadora oferece uma variedade de funcionalidades matemáticas e uma interface intuitiva para facilitar o uso. Ela foi projetada para funcionar em dispositivos Android e iOS, proporcionando uma experiência consistente em diferentes plataformas.
-
+> Este projeto é um aplicativo de lista de tarefas desenvolvido utilizando o framework Flutter e a linguagem Dart. Os usuários têm a capacidade de criar e gerenciar várias listas de afazeres de forma personalizada, permitindo uma organização eficaz de suas tarefas diárias.
 ## 🔧 Tecnologias Utilizadas
 
 No projeto, a principal tecnologia adotada foi o Flutter, utilizando a linguagem de programação Dart.
