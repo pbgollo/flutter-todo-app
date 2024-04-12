@@ -116,7 +116,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
                   print('Item clicado: ${itensMenu[i]}');
                 },
                 child: Container(
-                  color: _selectedIndex == i ? Colors.grey[200] : null,
+                  color: _selectedIndex == i ? Colors.grey[300] : null,
                   child: ListTile(
                     title: Text(itensMenu[i]),
                     trailing: Row(
