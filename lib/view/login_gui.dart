@@ -31,7 +31,7 @@ class LoginPage extends StatelessWidget {
               // Logo
               const Icon(
                 Icons.lock,
-                size: 100,
+                size: 110,
               ),
               const SizedBox(height: 30),
               // Mensagem de bem-vindo
@@ -155,7 +155,7 @@ class LoginPage extends StatelessWidget {
                   }, imagePath: 'lib/images/google.png'),
                 ],
               ),
-              const SizedBox(height: 45),
+              const SizedBox(height: 40),
               // Texto não possui uma conta
               GestureDetector(
                   onTap: () {
