@@ -29,6 +29,6 @@ class Grupo {
 
   @override
   String toString() {
-    return 'Grupo ${this.id}';
+    return 'Grupo $id';
   }
 }

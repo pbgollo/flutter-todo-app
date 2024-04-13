@@ -38,6 +38,6 @@ class Tarefa {
 
   @override
   String toString() {
-    return 'Tarefa ${this.id}';
+    return 'Tarefa $id';
   }
 }

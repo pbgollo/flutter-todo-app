@@ -44,10 +44,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
 
   @override
   Widget build(BuildContext context) {
-    print("current groupList: ${groupList}"); 
-    print("current todoList: ${todoList}"); 
-    print("current todoListFiltrada: ${todoListFiltrada}"); 
-    print("current _selectedIndex: ${_selectedIndex}"); 
+
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -456,7 +453,6 @@ class _PrincipalPageState extends State<PrincipalPage> {
         if (_selectedIndex == 0){
           grupoController.buscarGrupoPorUsuario(widget.usuario).then((value) {
             setState(() {
-              print("groupList atualizado ${groupList.first}");
               groupList = value;
               buscarTarefas(groupList.first);
             });
