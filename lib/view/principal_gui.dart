@@ -129,7 +129,6 @@ class _PrincipalPageState extends State<PrincipalPage> {
                   setState(() {
                     _selectedIndex = i;
                   });
-                  // Lista selecionada
                   buscarTarefas(groupList[i]);
                 },
                 child: Container(
@@ -296,9 +295,9 @@ class _PrincipalPageState extends State<PrincipalPage> {
       children: [
         Container(
           margin: const EdgeInsets.only(top: 50, bottom: 20),
-          child: const Text(
-            "Lista de Tarefas",
-            style: TextStyle(
+          child: Text(
+            groupList[_selectedIndex].nome,
+            style: const TextStyle(
               fontSize: 26,
               fontWeight: FontWeight.bold,
             ),

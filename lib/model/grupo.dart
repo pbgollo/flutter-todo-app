@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
 import 'package:trabalho_1/model/usuario.dart';
-
 
 class Grupo {
   int? id;
