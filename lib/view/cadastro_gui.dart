@@ -10,7 +10,6 @@ import 'package:trabalho_1/view/login_gui.dart';
 class RegisterPage extends StatelessWidget {
   RegisterPage({super.key});
 
-  // Controladores
   final nomeController = TextEditingController();
   final usuarioController = TextEditingController();
   final senhaController = TextEditingController();
@@ -88,6 +87,7 @@ class RegisterPage extends StatelessWidget {
                       const SnackBar(
                         content: Center(child: Text('Preencha todos os campos!')),
                         backgroundColor: Colors.red,
+                        behavior: SnackBarBehavior.floating,
                       ),
                     );
                   } else {
@@ -102,6 +102,7 @@ class RegisterPage extends StatelessWidget {
                         const SnackBar(
                           content: Center(child: Text('Usuário cadastrado com sucesso!')),
                           backgroundColor: Colors.green,
+                          behavior: SnackBarBehavior.floating,
                         ),
                       );
                       nomeController.clear();
@@ -113,6 +114,7 @@ class RegisterPage extends StatelessWidget {
                         const SnackBar(
                           content: Center(child: Text('Já existe um usuário com esse nome de usuário!')),
                           backgroundColor: Colors.red,
+                          behavior: SnackBarBehavior.floating,
                         ),
                       );
                     }
@@ -140,7 +142,7 @@ class RegisterPage extends StatelessWidget {
                     const Text(
                       'Entre',
                       style: TextStyle(
-                        color: Colors.blue,
+                        color: Colors.blueAccent,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

@@ -12,7 +12,6 @@ import 'package:trabalho_1/view/principal_gui.dart';
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
 
-  // Controladores
   final usuarioController = TextEditingController();
   final senhaController = TextEditingController();
   final UsuarioController _usuarioController = UsuarioController();
@@ -82,6 +81,7 @@ class LoginPage extends StatelessWidget {
                       const SnackBar(
                         content: Center(child: Text('Preencha todos os campos!')),
                         backgroundColor: Colors.red,
+                        behavior: SnackBarBehavior.floating,
                       ),
                     );
                   } else {
@@ -91,6 +91,8 @@ class LoginPage extends StatelessWidget {
                         const SnackBar(
                           content: Center(child: Text('Login bem-sucedido!')),
                           backgroundColor: Colors.green,
+                          behavior: SnackBarBehavior.floating,
+                          duration: Duration(seconds: 1),
                         ),
                       );
                       Usuario usuario = (await _usuarioController.consultarUsuarioPorNome(nomeUsuario))!;
@@ -105,6 +107,7 @@ class LoginPage extends StatelessWidget {
                         const SnackBar(
                           content: Center(child: Text('Credenciais inválidas!')),
                           backgroundColor: Colors.red,
+                          behavior: SnackBarBehavior.floating,
                         ),
                       );
                     }
@@ -150,6 +153,7 @@ class LoginPage extends StatelessWidget {
                       const SnackBar(
                         content: Center(child: Text('Funcionalidade ainda não implementada!')),
                         backgroundColor: Colors.red,
+                        behavior: SnackBarBehavior.floating,
                       ),
                     );
                   }, imagePath: 'lib/images/google.png'),
@@ -175,7 +179,7 @@ class LoginPage extends StatelessWidget {
                     const Text(
                       'Cadastre-se',
                       style: TextStyle(
-                        color: Colors.blue,
+                        color: Colors.blueAccent,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

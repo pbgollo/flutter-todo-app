@@ -42,14 +42,12 @@ class TarefaController {
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
     tarefa.id = id;
-
     return tarefa;
   }
 
   // Método que retorna as tarefas do usuário
   Future<List<Tarefa>> buscarTarefaPorUsuarioEGrupo(Usuario usuario, Grupo grupo) async {
     try {
-      print('Buscar tarefas por usuario: ${usuario.id} e grupo: ${grupo.id}');
       final Database db = await _bancoHelper.database;
 
       List<Map<String, dynamic>> result = await db.query(
@@ -70,7 +68,6 @@ class TarefaController {
         tarefas.add(tarefa);
       }       
       return tarefas;
-
     } catch (e) {
       return [];
     }

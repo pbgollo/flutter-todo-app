@@ -10,10 +10,9 @@ import 'package:trabalho_1/control/grupo_controller.dart';
 import 'package:trabalho_1/view/login_gui.dart';
 
 class PrincipalPage extends StatefulWidget {
-  final Usuario usuario;
-
   const PrincipalPage({super.key, required this.usuario});
 
+  final Usuario usuario;
 
   @override
   State<PrincipalPage> createState() => _PrincipalPageState();
@@ -30,7 +29,6 @@ class _PrincipalPageState extends State<PrincipalPage> {
 
   List<Tarefa> todoList = [];
   List<Tarefa> todoListFiltrada = [];
-
   List<Grupo> groupList = [];
 
   @override
@@ -44,7 +42,6 @@ class _PrincipalPageState extends State<PrincipalPage> {
 
   @override
   Widget build(BuildContext context) {
-
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -94,7 +91,6 @@ class _PrincipalPageState extends State<PrincipalPage> {
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
-          // Alinhamento do ListView
           children: <Widget>[
             const DrawerHeader(
               decoration: BoxDecoration(
@@ -157,7 +153,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
             // Botão de adicionar lista
             Container(
               alignment: Alignment.centerRight,
-              padding: const EdgeInsets.only(right: 25, bottom: 8, top: 5), // Reduzindo o espaçamento
+              padding: const EdgeInsets.only(right: 25, bottom: 8, top: 5),
               child: SizedBox(
                 width: 46,
                 height: 46,
@@ -176,6 +172,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
           ],
         ),
       ),
+      // Corpo do app
       body: Stack(
         children: [
           Container(
@@ -288,27 +285,34 @@ class _PrincipalPageState extends State<PrincipalPage> {
 
   // Monta a lista de tarefas
   Widget montarLista(List<Tarefa> lista) {
-    return ListView(
-      children: [
-        Container(
-          margin: const EdgeInsets.only(top: 50, bottom: 20),
-          child: Text(
-            groupList[_selectedIndex].nome,
-            style: const TextStyle(
-              fontSize: 26,
-              fontWeight: FontWeight.bold,
+    if (groupList.isNotEmpty) {
+      if (_selectedIndex < 0) {
+        _selectedIndex = 0;
+      }
+      return ListView(
+        children: [
+          Container(
+            margin: const EdgeInsets.only(top: 50, bottom: 20),
+            child: Text(
+              groupList[_selectedIndex].nome,
+              style: const TextStyle(
+                fontSize: 26,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
-        ),
-        // Criação das tarefas
-        for (Tarefa tarefa in lista.reversed)
-          ToDoItem(
-            todo: tarefa,
-            mudarEstado: mudarEstado,
-            deletarTarefa: deletarTarefa,
-          ),
-      ],
-    );
+          // Criação das tarefas
+          for (Tarefa tarefa in lista.reversed)
+            ToDoItem(
+              todo: tarefa,
+              mudarEstado: mudarEstado,
+              deletarTarefa: deletarTarefa,
+            ),
+        ],
+      );
+    } else {
+      return const Text('Nenhum grupo disponível');
+    }
   }
 
   // Busca as tarefas do usuário
@@ -376,8 +380,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
     });
   }
 
-
-// Adiciona uma tarefa
+  // Adiciona uma tarefa
   void adicionarGrupo(String descricao) {
     if (descricao.isNotEmpty) {
       grupoController.adicionarGrupo(descricao, widget.usuario).then((value) {
@@ -393,6 +396,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
     }
   }
   
+  // Dialog para adicionar um novo grupo de tarefas
   void alertAdicionarGrupo() {
     TextEditingController controller = TextEditingController();
 

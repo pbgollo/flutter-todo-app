@@ -5,7 +5,7 @@ import 'package:trabalho_1/database/banco_helper.dart';
 import 'package:trabalho_1/model/usuario.dart';
 
 class UsuarioController {
-  final BancoHelper _bancoHelper = BancoHelper.instance; // Instância do BancoHelper
+  final BancoHelper _bancoHelper = BancoHelper.instance; 
 
   // Método para validar o usuário
   Future<bool> validarUsuario(String nomeUsuario, String senha) async {
@@ -50,9 +50,6 @@ class UsuarioController {
   Future<Usuario?> consultarUsuarioPorNome(String nomeUsuario) async {
     try {
       final Database db = await _bancoHelper.database;
-
-      // await db.execute('drop table tarefa');
-      // await db.execute('drop table grupo_tarefa');
 
       List<Map<String, dynamic>> result = await db.query(
         'usuario',

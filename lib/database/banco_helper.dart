@@ -8,7 +8,6 @@ class BancoHelper {
 
   BancoHelper._privateConstructor();
   static final BancoHelper instance = BancoHelper._privateConstructor();
-
   static Database? _database;
 
   Future<Database> get database async {

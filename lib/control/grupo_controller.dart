@@ -6,9 +6,9 @@ import 'package:trabalho_1/model/grupo.dart';
 import 'package:trabalho_1/model/usuario.dart';
 
 class GrupoController {
-  final BancoHelper _bancoHelper = BancoHelper.instance; // Instância do BancoHelper
+  final BancoHelper _bancoHelper = BancoHelper.instance;
 
-  // Altera o estado da tarefa entre feita e não feita
+  // Método para editar um grupo de tarefas
   Future<bool> editarGrupo(Grupo grupo) async{
     final Database db = await _bancoHelper.database;
     await db.update(
@@ -20,7 +20,7 @@ class GrupoController {
     return true;
   }
 
-  // Método para deletar uma tarefa
+  // Método para deletar um grupo de tarefas
   Future<bool> deletarGrupo(Grupo grupo) async{
     final Database db = await _bancoHelper.database;
     await db.delete(
@@ -28,13 +28,10 @@ class GrupoController {
       where: 'id =?',
       whereArgs: [grupo.id],
     );
-
-    // await buscarGrupoPorUsuario(grupo.usuario);
-
     return true;
   }
 
-  // Método para adicionar uma nova tarefa
+  // Método para adicionar um novo grupo de tarefas
   Future<Grupo> adicionarGrupo(String nome, Usuario usuario) async {
     final Database db = await _bancoHelper.database;
     Grupo grupo = Grupo(nome: nome, usuario: usuario);
@@ -46,7 +43,7 @@ class GrupoController {
     return Grupo(id: tarefaId,nome: grupo.nome, usuario: grupo.usuario);
   }
 
-  // Método que retorna as tarefas do usuário
+  // Método que retorna os grupos de tarefas do usuário
   Future<List<Grupo>> buscarGrupoPorUsuario(Usuario usuario) async {
     try {
       final Database db = await _bancoHelper.database;
@@ -66,13 +63,12 @@ class GrupoController {
         );
         grupos.add(grupo);
       }
+
       if (grupos.isEmpty) {
         Grupo grupo = await adicionarGrupo("Lista padrão", usuario);
         grupos.add(grupo);
       }
-
       return grupos;
-
     } catch (e) {
       print("Erro ao consultar grupos: $e");
       return [];
