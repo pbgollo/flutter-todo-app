@@ -57,7 +57,7 @@ class ToDoItem extends StatelessWidget {
             iconSize: 18,
             icon: const Icon(Icons.delete),
             onPressed: (){
-              deletarTarefa(todo.id);
+              deletarTarefa(todo);
             }
           ),
         ),

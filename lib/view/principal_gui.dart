@@ -3,8 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:trabalho_1/components/todo_item.dart';
 import 'package:trabalho_1/model/tarefa.dart';
+import 'package:trabalho_1/model/grupo.dart';
 import 'package:trabalho_1/model/usuario.dart';
 import 'package:trabalho_1/control/tarefa_controller.dart';
+import 'package:trabalho_1/control/grupo_controller.dart';
 import 'package:trabalho_1/view/login_gui.dart';
 
 class PrincipalPage extends StatefulWidget {
@@ -18,19 +20,34 @@ class PrincipalPage extends StatefulWidget {
 }
 
 class _PrincipalPageState extends State<PrincipalPage> {
-  bool primeira = true;
-  int? _selectedIndex;
+  int _selectedIndex = 0;
+
   final tarefaPesquisaController = TextEditingController();
   final tarefaTextController = TextEditingController();
+
   final TarefaController tarefaController = TarefaController();
+  final GrupoController grupoController = GrupoController();
+
   List<Tarefa> todoList = [];
   List<Tarefa> todoListFiltrada = [];
 
-  List<String> itensMenu = ['Lista 1', 'Lista 2', 'Lista 3'];
+  List<Grupo> groupList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    grupoController.buscarGrupoPorUsuario(widget.usuario).then((value) {
+      groupList = value;
+      buscarTarefas(value.first);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    buscarTarefas();
+    print("current groupList: ${groupList}"); 
+    print("current todoList: ${todoList}"); 
+    print("current todoListFiltrada: ${todoListFiltrada}"); 
+    print("current _selectedIndex: ${_selectedIndex}"); 
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -106,19 +123,19 @@ class _PrincipalPageState extends State<PrincipalPage> {
               ),
             ),
             // Adicionando os itens do menu
-            for (var i = 0; i < itensMenu.length; i++)
+            for (var i = 0; i < groupList.length; i++)
               GestureDetector(
                 onTap: () {
                   setState(() {
                     _selectedIndex = i;
                   });
                   // Lista selecionada
-                  print('Item clicado: ${itensMenu[i]}');
+                  buscarTarefas(groupList[i]);
                 },
                 child: Container(
                   color: _selectedIndex == i ? Colors.grey[300] : null,
                   child: ListTile(
-                    title: Text(itensMenu[i]),
+                    title: Text(groupList[i].nome),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -126,14 +143,14 @@ class _PrincipalPageState extends State<PrincipalPage> {
                           color: Colors.grey[600],
                           icon: const Icon(Icons.edit),
                           onPressed: () {
-                            editarItemMenu(i);
+                            editarItemMenu(groupList[i]);
                           },
                         ),
                         IconButton(
                           color: Colors.red,
                           icon: const Icon(Icons.delete),
                           onPressed: () {
-                            deletarItemMenu(i);
+                            deletarGrupo(groupList[i]);
                           },
                         ),
                       ],
@@ -150,7 +167,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
                 height: 46,
                 child: FloatingActionButton(
                   onPressed: () {
-                    adicionarNovaLista();
+                    alertAdicionarGrupo();
                   },
                   backgroundColor: const Color.fromARGB(255, 147, 212, 74),
                   child: const Icon(
@@ -251,7 +268,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
                   ),
                   child: ElevatedButton(
                     onPressed: (){
-                      adicionarTarefa(tarefaTextController.text);
+                      adicionarTarefa(tarefaTextController.text, groupList[_selectedIndex]);
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(Colors.blueAccent), 
@@ -271,76 +288,6 @@ class _PrincipalPageState extends State<PrincipalPage> {
         ],
       ),
     );
-  }
-
-  // Busca as tarefas do usuário
-  void buscarTarefas() {
-    tarefaController.buscarTarefaPorUsuario(widget.usuario).then((value) {
-      setState(() {
-        todoList = value;
-        if(primeira){
-          todoListFiltrada = value;
-        }
-        primeira = false;
-      });
-    }).catchError((error) {
-      print("Erro ao buscar tarefas: $error");
-    });
-  }
-
-  // Altera o estado da tarefa entre feita e não feita
-  void mudarEstado(Tarefa todo) {
-    tarefaController.mudarEstado(todo).then((success) {
-      setState(() {
-        todo.estado = todo.estado==1?0:1;
-      });
-    }).catchError((error) {
-      print("Erro ao mudar estado da tarefa: $error");
-    });
-  }
-
-  // Deleta uma tarefa
-  void deletarTarefa(int id){
-    setState(() {
-      tarefaController.deletarTarefa(id).then((success) {
-        todoList.removeWhere((item) => item.id == id);
-        
-      if (tarefaPesquisaController.text.isEmpty){
-        todoListFiltrada = todoList;
-      } else {
-        todoListFiltrada = todoList.where((element) => element.descricao!.toLowerCase().contains(tarefaPesquisaController.text.toLowerCase())).toList();
-      }
-      });
-    });
-  }
-
-  // Adiciona uma tarefa
-  void adicionarTarefa(String descricao) {
-    if (tarefaTextController.text.isNotEmpty) {
-      Tarefa tarefa = Tarefa(descricao: descricao, usuario: widget.usuario);
-      tarefaController.adicionarTarefa(tarefa).then((novaTarefa) {
-        setState(() {
-          todoList.add(novaTarefa);
-          tarefaTextController.clear();
-          todoListFiltrada = todoList;
-        });
-      }).catchError((error) {
-        print("Erro ao adicionar tarefa: $error");
-      });
-    }
-  }
-
-  // Filtra as tarefas de acordo com a pesquisa
-  void filtrarTarefas(String pesquisa){
-    List<Tarefa> resultados = [];
-    if (pesquisa.isEmpty){
-      resultados = todoList;
-    } else {
-      resultados = todoList.where((element) => element.descricao!.toLowerCase().contains(pesquisa.toLowerCase())).toList();
-    }
-    setState(() {
-      todoListFiltrada = resultados;
-    });
   }
 
   // Monta a lista de tarefas
@@ -368,70 +315,89 @@ class _PrincipalPageState extends State<PrincipalPage> {
     );
   }
 
-  // Função para deletar um item do menu
-  void deletarItemMenu(int index) {
-    setState(() {
-      itensMenu.removeAt(index);
+  // Busca as tarefas do usuário
+  void buscarTarefas(Grupo grupo) {
+    tarefaController.buscarTarefaPorUsuarioEGrupo(widget.usuario, grupo).then((value) {
+      setState(() {
+        todoList = value;
+        todoListFiltrada = todoList;
+      });
+    }).catchError((error) {
+      print("Erro ao buscar tarefas: $error");
     });
   }
 
-  // Função para editar um item do menu
-  void editarItemMenu(int index) {
-    TextEditingController controller = TextEditingController(text: itensMenu[index]);
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.grey[100],
-          title: const Text(
-            'Editar nome da lista',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w500
-            ),
-          ),
-          content: TextField(
-            controller: controller,
-            decoration: const InputDecoration(
-              labelText: 'Nome',
-              labelStyle: TextStyle(
-                fontSize: 19,
-              ),
-            ),
-          ),
-          actions: <Widget>[
-            ButtonBar(
-              alignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  color: Colors.red, 
-                  iconSize: 36, 
-                  icon: const Icon(Icons.close_rounded), 
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-                IconButton(
-                  color: Colors.green, 
-                  iconSize: 36, 
-                  icon: const Icon(Icons.check_rounded), 
-                  onPressed: () {
-                    setState(() {
-                      itensMenu[index] = controller.text;
-                    });
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            ),
-          ],
-        );
-      },
-    );
+  // Adiciona uma tarefa
+  void adicionarTarefa(String descricao, Grupo grupo) {
+    if (tarefaTextController.text.isNotEmpty) {
+      tarefaController.adicionarTarefa(descricao, widget.usuario, grupo).then((novaTarefa) {
+        setState(() {
+          todoList.add(novaTarefa);
+          tarefaTextController.clear();
+          todoListFiltrada = todoList;
+        });
+      }).catchError((error) {
+        print("Erro ao adicionar tarefa: $error");
+      });
+    }
   }
 
-  void adicionarNovaLista() {
+  // Altera o estado da tarefa entre feita e não feita
+  void mudarEstado(Tarefa todo) {
+    tarefaController.mudarEstado(todo).then((success) {
+      setState(() {
+        todo.estado = todo.estado==1?0:1;
+      });
+    }).catchError((error) {
+      print("Erro ao mudar estado da tarefa: $error");
+    });
+  }
+
+  // Deleta uma tarefa
+  void deletarTarefa(Tarefa todo){
+    tarefaController.deletarTarefa(todo.id!).then((success) {
+      setState(() {
+        buscarTarefas(todo.grupo);        
+        if (tarefaPesquisaController.text.isEmpty){
+          todoListFiltrada = todoList;
+        } else {
+          todoListFiltrada = todoList.where((element) => element.descricao!.toLowerCase().contains(tarefaPesquisaController.text.toLowerCase())).toList();
+        }
+      });
+    });
+  }
+  
+  // Filtra as tarefas de acordo com a pesquisa
+  void filtrarTarefas(String pesquisa){
+    List<Tarefa> resultados = [];
+    if (pesquisa.isEmpty){
+      resultados = todoList;
+    } else {
+      resultados = todoList.where((element) => element.descricao!.toLowerCase().contains(pesquisa.toLowerCase())).toList();
+    }
+    setState(() {
+      todoListFiltrada = resultados;
+    });
+  }
+
+
+// Adiciona uma tarefa
+  void adicionarGrupo(String descricao) {
+    if (descricao.isNotEmpty) {
+      grupoController.adicionarGrupo(descricao, widget.usuario).then((value) {
+        setState(() {
+          groupList.add(value);
+          todoList=[];
+          todoListFiltrada=[];
+          _selectedIndex = groupList.length - 1;
+        });
+      }).catchError((error) {
+        print("Erro ao adicionar grupo: $error");
+      });
+    }
+  }
+  
+  void alertAdicionarGrupo() {
     TextEditingController controller = TextEditingController();
 
     showDialog(
@@ -472,11 +438,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
                   iconSize: 36, 
                   icon: const Icon(Icons.check_rounded), 
                   onPressed: () {
-                    if (controller.text.isNotEmpty) {
-                      setState(() {
-                        itensMenu.add(controller.text);
-                      });
-                    }
+                    adicionarGrupo(controller.text);
                     Navigator.of(context).pop();
                   },
                 ),
@@ -487,4 +449,88 @@ class _PrincipalPageState extends State<PrincipalPage> {
       },
     );
   } 
+
+  // Deleta uma tarefa
+  void deletarGrupo(Grupo grupo){
+    grupoController.deletarGrupo(grupo).then((success) {
+      if (grupo.id == groupList[_selectedIndex].id) {
+        if (_selectedIndex == 0){
+          grupoController.buscarGrupoPorUsuario(widget.usuario).then((value) {
+            setState(() {
+              print("groupList atualizado ${groupList.first}");
+              groupList = value;
+              buscarTarefas(groupList.first);
+            });
+          });
+          return null;
+        }
+        setState(() {
+          _selectedIndex = 0;
+          buscarTarefas(groupList[_selectedIndex]);
+          groupList.removeWhere((item) => item.id == grupo.id);
+        });
+        return null;
+      }
+      setState(() {
+        groupList.removeWhere((item) => item.id == grupo.id);
+      });
+    });
+  }
+
+  // Função para editar um item do menu
+  void editarItemMenu(Grupo grupo) {
+    TextEditingController controller = TextEditingController(text: grupo.nome);
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.grey[100],
+          title: const Text(
+            'Editar nome da lista',
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w500
+            ),
+          ),
+          content: TextField(
+            controller: controller,
+            decoration: const InputDecoration(
+              labelText: 'Nome',
+              labelStyle: TextStyle(
+                fontSize: 19,
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            ButtonBar(
+              alignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  color: Colors.red, 
+                  iconSize: 36, 
+                  icon: const Icon(Icons.close_rounded), 
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                IconButton(
+                  color: Colors.green, 
+                  iconSize: 36, 
+                  icon: const Icon(Icons.check_rounded), 
+                  onPressed: () {
+                    setState(() {
+                      grupo.nome = controller.text;
+                      grupoController.editarGrupo(grupo);
+                    });
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

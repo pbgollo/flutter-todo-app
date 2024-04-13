@@ -3,75 +3,78 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:trabalho_1/database/banco_helper.dart';
 import 'package:trabalho_1/model/grupo.dart';
-import 'package:trabalho_1/model/tarefa.dart';
 import 'package:trabalho_1/model/usuario.dart';
 
-class TarefaController {
+class GrupoController {
   final BancoHelper _bancoHelper = BancoHelper.instance; // Instância do BancoHelper
 
   // Altera o estado da tarefa entre feita e não feita
-  Future<bool> mudarEstado(Tarefa tarefa) async{
+  Future<bool> editarGrupo(Grupo grupo) async{
     final Database db = await _bancoHelper.database;
     await db.update(
-      'tarefa',
-      {'estado':tarefa.estado==1?0:1},
+      'grupo',
+      {'nome': grupo.nome},
       where: 'id =?',
-      whereArgs: [tarefa.id],
+      whereArgs: [grupo.id],
     );
     return true;
   }
 
   // Método para deletar uma tarefa
-  Future<bool> deletarTarefa(int id) async{
+  Future<bool> deletarGrupo(Grupo grupo) async{
     final Database db = await _bancoHelper.database;
     await db.delete(
-      'tarefa',
+      'grupo',
       where: 'id =?',
-      whereArgs: [id],
+      whereArgs: [grupo.id],
     );
+
+    // await buscarGrupoPorUsuario(grupo.usuario);
+
     return true;
   }
 
   // Método para adicionar uma nova tarefa
-  Future<Tarefa> adicionarTarefa(String descricao, Usuario usuario, Grupo grupo) async {
+  Future<Grupo> adicionarGrupo(String nome, Usuario usuario) async {
     final Database db = await _bancoHelper.database;
-    Tarefa tarefa = Tarefa(descricao: descricao, usuario: usuario, grupo: grupo);
-    int? id = await db.insert(
-      'tarefa',
-      tarefa.toMap(),
+    Grupo grupo = Grupo(nome: nome, usuario: usuario);
+    int tarefaId = await db.insert(
+      'grupo',
+      grupo.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-    tarefa.id = id;
-
-    return tarefa;
+    return Grupo(id: tarefaId,nome: grupo.nome, usuario: grupo.usuario);
   }
 
   // Método que retorna as tarefas do usuário
-  Future<List<Tarefa>> buscarTarefaPorUsuarioEGrupo(Usuario usuario, Grupo grupo) async {
+  Future<List<Grupo>> buscarGrupoPorUsuario(Usuario usuario) async {
     try {
-      print('Buscar tarefas por usuario: ${usuario.id} e grupo: ${grupo.id}');
       final Database db = await _bancoHelper.database;
-
+      
       List<Map<String, dynamic>> result = await db.query(
-        'tarefa',
-        where: 'id_usuario = ? and id_grupo = ?',
-        whereArgs: [usuario.id, grupo.id],
+        'grupo',
+        where: 'id_usuario = ?',
+        whereArgs: [usuario.id],
       );
       
-      List<Tarefa> tarefas = [];
+      List<Grupo> grupos = [];
       for (var row in result) {
-        Tarefa tarefa = Tarefa(
+        Grupo grupo = Grupo(
           id: row['id'] as int,
-          descricao: row['descricao'] as String?,
-          estado: row['estado'] as int,
-          usuario: usuario,
-          grupo: grupo
+          nome: row['nome'] as String,
+          usuario: usuario
         );
-        tarefas.add(tarefa);
-      }       
-      return tarefas;
+        grupos.add(grupo);
+      }
+      if (grupos.isEmpty) {
+        Grupo grupo = await adicionarGrupo("Lista padrão", usuario);
+        grupos.add(grupo);
+      }
+
+      return grupos;
 
     } catch (e) {
+      print("Erro ao consultar grupos: $e");
       return [];
     }
   }

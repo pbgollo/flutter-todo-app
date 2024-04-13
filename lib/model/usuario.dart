@@ -28,4 +28,9 @@ class Usuario {
       senha: map['senha'] as String?,
     );
   }
+
+  @override
+  String toString() {
+    return 'Usuario ${this.id}';
+  }
 }
