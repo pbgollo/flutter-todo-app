@@ -289,42 +289,49 @@ class _PrincipalPageState extends State<PrincipalPage> {
       if (_selectedIndex < 0) {
         _selectedIndex = 0;
       }
-      return ListView(
-        children: [
-          Container(
-            margin: const EdgeInsets.only(top: 50, bottom: 20),
-            child: Text(
-              groupList[_selectedIndex].nome,
-              style: const TextStyle(
-                fontSize: 26,
-                fontWeight: FontWeight.bold,
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 55),
+        child: ListView(
+          children: [
+            Container(
+              margin: const EdgeInsets.only(top: 50, bottom: 20),
+              child: Text(
+                groupList[_selectedIndex].nome,
+                style: const TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-          ),
-          // Criação das tarefas
-          for (Tarefa tarefa in lista.reversed)
-            ToDoItem(
-              todo: tarefa,
-              mudarEstado: mudarEstado,
-              deletarTarefa: deletarTarefa,
-            ),
-        ],
+            // Criação das tarefas
+            for (Tarefa tarefa in lista.reversed)
+              ToDoItem(
+                todo: tarefa,
+                mudarEstado: mudarEstado,
+                deletarTarefa: deletarTarefa,
+              ),
+          ],
+        ),
       );
     } else {
       return const Text('Nenhum grupo disponível');
     }
   }
 
-  // Busca as tarefas do usuário
-  void buscarTarefas(Grupo grupo) {
-    tarefaController.buscarTarefaPorUsuarioEGrupo(widget.usuario, grupo).then((value) {
+  Future<void> buscarTarefas(Grupo grupo) async {
+    try {
+      List<Tarefa> tarefas = await tarefaController.buscarTarefaPorUsuarioEGrupo(widget.usuario, grupo);
       setState(() {
-        todoList = value;
-        todoListFiltrada = todoList;
+        todoList = tarefas;
+        if (tarefaPesquisaController.text.isEmpty) {
+          todoListFiltrada = todoList;
+        } else {
+          todoListFiltrada = todoList.where((element) => element.descricao!.toLowerCase().contains(tarefaPesquisaController.text.toLowerCase())).toList();
+        }
       });
-    }).catchError((error) {
+    } catch (error) {
       print("Erro ao buscar tarefas: $error");
-    });
+    }
   }
 
   // Adiciona uma tarefa
@@ -354,16 +361,19 @@ class _PrincipalPageState extends State<PrincipalPage> {
   }
 
   // Deleta uma tarefa
-  void deletarTarefa(Tarefa todo){
+  void deletarTarefa(Tarefa todo) {
     tarefaController.deletarTarefa(todo.id!).then((success) {
       setState(() {
-        buscarTarefas(todo.grupo);        
-        if (tarefaPesquisaController.text.isEmpty){
-          todoListFiltrada = todoList;
-        } else {
-          todoListFiltrada = todoList.where((element) => element.descricao!.toLowerCase().contains(tarefaPesquisaController.text.toLowerCase())).toList();
-        }
+        buscarTarefas(todo.grupo).then((_) {
+          if (tarefaPesquisaController.text.isEmpty) {
+            todoListFiltrada = todoList;
+          } else {
+            todoListFiltrada = todoList.where((element) => element.descricao!.toLowerCase().contains(tarefaPesquisaController.text.toLowerCase())).toList();
+          }
+        });
       });
+    }).catchError((error) {
+      print("Erro ao deletar tarefa: $error");
     });
   }
   
