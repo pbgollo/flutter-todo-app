@@ -22,9 +22,8 @@ Antes de começar, verifique se você atende aos seguintes requisitos:
 - Você tem um editor de código compatível com o Flutter, como o Visual Studio Code ou o Android Studio
 - Você tem um dispositivo físico com USB disponível ou um emulador configurado para executar a aplicação
 
-## 🚀 Instalando o Pulse
-
-Para instalar o aplicativo da calculadora, siga estas etapas:
+## 🚀 Instalando o App
+Para instalar o aplicativo de ToDo List, siga estas etapas:
 
 - Clone este repositório para o seu ambiente local
 - Abra o projeto no seu editor de código
