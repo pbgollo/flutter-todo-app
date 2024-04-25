@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "511722408379",
+    "project_id": "mobile-auth-ucs",
+    "storage_bucket": "mobile-auth-ucs.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:511722408379:android:2e8cc0113aabd0a9d01c9e",
+        "android_client_info": {
+          "package_name": "br.ucs.trabalho_1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHuNEqyIjwGI2c-NkvZi_KJkPCgJNtDZs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
