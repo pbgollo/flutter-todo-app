@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:trabalho_1/components/todo_item.dart';
+import 'package:trabalho_1/control/usuario_controller.dart';
 import 'package:trabalho_1/model/tarefa.dart';
 import 'package:trabalho_1/model/grupo.dart';
 import 'package:trabalho_1/model/usuario.dart';
@@ -26,6 +27,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
 
   final TarefaController tarefaController = TarefaController();
   final GrupoController grupoController = GrupoController();
+  final UsuarioController _usuarioController = UsuarioController();
 
   List<Tarefa> todoList = [];
   List<Tarefa> todoListFiltrada = [];
@@ -76,6 +78,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
               icon: const Icon(Icons.logout), 
               color: Colors.black,
               onPressed: () {
+                _usuarioController.logout();
                 Navigator.pushReplacement(
                   context,
                     MaterialPageRoute(
@@ -314,7 +317,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
         ),
       );
     } else {
-      return const Text('Nenhum grupo disponível');
+      return const Text('Nenhum grupo disponível!');
     }
   }
 
