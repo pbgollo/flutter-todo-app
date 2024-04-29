@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:trabalho_1/components/botao_login.dart';
@@ -148,15 +148,22 @@ class LoginPage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SquareTile(onTap:(){
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Center(child: Text('Funcionalidade ainda não implementada!')),
-                        backgroundColor: Colors.red,
-                        behavior: SnackBarBehavior.floating,
-                      ),
-                    );
-                  }, imagePath: 'lib/images/google.png'),
+                  SquareTile(
+                    onTap: () async {
+                      Usuario? usuario = await _usuarioController.signInWithGoogle();
+                      if (usuario != null) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PrincipalPage(usuario: usuario),
+                          ),
+                        );
+                      } else {
+                        print('Falha ao fazer login com o Google');
+                      }
+                    },
+                    imagePath: 'lib/images/google.png'
+                  ),
                 ],
               ),
               const SizedBox(height: 40),
