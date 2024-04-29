@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:trabalho_1/components/todo_item.dart';
+import 'package:trabalho_1/control/audio_player_controller.dart';
 import 'package:trabalho_1/control/usuario_controller.dart';
 import 'package:trabalho_1/model/tarefa.dart';
 import 'package:trabalho_1/model/grupo.dart';
@@ -29,6 +30,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
   final TarefaController tarefaController = TarefaController();
   final GrupoController grupoController = GrupoController();
   final UsuarioController _usuarioController = UsuarioController();
+  final AudioPlayerController playerController = AudioPlayerController();
 
   List<Tarefa> todoList = [];
   List<Tarefa> todoListFiltrada = [];
@@ -356,6 +358,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
     }
   }
 
+  // Busca as tarefas do grupo
   Future<void> buscarTarefas(Grupo grupo) async {
     try {
       List<Tarefa> tarefas = await tarefaController.buscarTarefaPorUsuarioEGrupo(widget.usuario, grupo);
@@ -381,6 +384,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
           tarefaTextController.clear();
           todoListFiltrada = todoList;
         });
+        playerController.playAudio('audio/write.wav'); 
       }).catchError((error) {
         print("Erro ao adicionar tarefa: $error");
       });
@@ -393,6 +397,10 @@ class _PrincipalPageState extends State<PrincipalPage> {
       setState(() {
         todo.estado = todo.estado==1?0:1;
       });
+      if (todo.estado == 1) {
+        playerController.playAudio('audio/reward.wav'); 
+        print("Entrou");
+      }
     }).catchError((error) {
       print("Erro ao mudar estado da tarefa: $error");
     });
@@ -410,6 +418,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
           }
         });
       });
+      playerController.playAudio('audio/delete.wav'); 
     }).catchError((error) {
       print("Erro ao deletar tarefa: $error");
     });
@@ -428,7 +437,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
     });
   }
 
-  // Adiciona uma tarefa
+  // Adiciona uma novo grupo
   void adicionarGrupo(String descricao) {
     if (descricao.isNotEmpty) {
       grupoController.adicionarGrupo(descricao, widget.usuario).then((value) {
@@ -438,6 +447,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
           todoListFiltrada=[];
           _selectedIndex = groupList.length - 1;
         });
+        playerController.playAudio('audio/write.wav'); 
       }).catchError((error) {
         print("Erro ao adicionar grupo: $error");
       });
@@ -447,7 +457,6 @@ class _PrincipalPageState extends State<PrincipalPage> {
   // Dialog para adicionar um novo grupo de tarefas
   void alertAdicionarGrupo() {
     TextEditingController controller = TextEditingController();
-
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -498,9 +507,10 @@ class _PrincipalPageState extends State<PrincipalPage> {
     );
   } 
 
-  // Deleta uma tarefa
+  // Deleta um grupo
   void deletarGrupo(Grupo grupo){
     grupoController.deletarGrupo(grupo).then((success) {
+      playerController.playAudio('audio/delete.wav');
       if (grupo.id == groupList[_selectedIndex].id) {
         if (_selectedIndex == 0){
           grupoController.buscarGrupoPorUsuario(widget.usuario).then((value) {
@@ -527,7 +537,6 @@ class _PrincipalPageState extends State<PrincipalPage> {
   // Função para editar um item do menu
   void editarItemMenu(Grupo grupo) {
     TextEditingController controller = TextEditingController(text: grupo.nome);
-
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -570,6 +579,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
                       grupo.nome = controller.text;
                       grupoController.editarGrupo(grupo);
                     });
+                    playerController.playAudio('audio/write.wav'); 
                     Navigator.of(context).pop();
                   },
                 ),
