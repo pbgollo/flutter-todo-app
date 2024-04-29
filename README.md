@@ -4,7 +4,7 @@
 ![GitHub language count](https://img.shields.io/github/languages/count/pbgollo/trabalho_mobile_1?style=for-the-badge)
 ![GitHub forks](https://img.shields.io/github/forks/pbgollo/trabalho_mobile_1?style=for-the-badge)
 
-<img src="lib/images/todo.png" alt="Exemplo imagem">
+<img src="assets/images/todo.png" alt="Exemplo imagem">
 
 > Este projeto é um aplicativo de lista de tarefas desenvolvido utilizando o framework Flutter e a linguagem Dart. Os usuários têm a capacidade de criar e gerenciar várias listas de afazeres de forma personalizada, permitindo uma organização eficaz de suas tarefas diárias.
 ## 🔧 Tecnologias Utilizadas

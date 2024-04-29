@@ -72,9 +72,6 @@ class BancoHelper {
         )
       ''');
     }
-    if (oldVersion < 4) {
-      await db.execute('delete from tarefa');
-    }
   }
 
   Future<void> _downgradeBanco(Database db, int oldVersion, int newVersion) async {

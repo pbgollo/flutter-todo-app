@@ -144,7 +144,7 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 30),
-              // Botao do google
+              // Botão do Google
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -162,7 +162,7 @@ class LoginPage extends StatelessWidget {
                         print('Falha ao fazer login com o Google');
                       }
                     },
-                    imagePath: 'lib/images/google.png'
+                    imagePath: 'assets/images/google.png'
                   ),
                 ],
               ),

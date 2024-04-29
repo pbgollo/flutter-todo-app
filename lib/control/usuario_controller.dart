@@ -72,6 +72,7 @@ class UsuarioController {
     }
   }
 
+  // Método para entrar com a conta do Google
   Future<Usuario?> signInWithGoogle() async {
     try {
       UserCredential? userCredential = await _authService.signInWithGoogle();
@@ -86,14 +87,13 @@ class UsuarioController {
         if (usuarioExistente != null) {
           return usuarioExistente;
         } else {
-          print('Usuário não existe, cadastrando...');
+          // Se o usuário não existir, deve ser cadastrado
           Usuario novoUsuario = Usuario(
             nome: user.displayName ?? '',
             usuario: user.email ?? '',
             senha: 'master',
           );
           await adicionarUsuario(novoUsuario);
-          print('Usuário cadastrado, realizando login...');
           return novoUsuario;
         }
       } else {
@@ -105,6 +105,7 @@ class UsuarioController {
     return null;
   }
 
+  // Método para deslogar da conta do Google
   void logout() {
     _authService.logOut();
   }
