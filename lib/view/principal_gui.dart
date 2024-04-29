@@ -9,6 +9,7 @@ import 'package:trabalho_1/model/usuario.dart';
 import 'package:trabalho_1/control/tarefa_controller.dart';
 import 'package:trabalho_1/control/grupo_controller.dart';
 import 'package:trabalho_1/view/login_gui.dart';
+import 'package:trabalho_1/view/weather_gui.dart';
 
 class PrincipalPage extends StatefulWidget {
   const PrincipalPage({super.key, required this.usuario});
@@ -57,35 +58,68 @@ class _PrincipalPageState extends State<PrincipalPage> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Builder(
-              builder: (context) => IconButton(
-                icon: const Icon(Icons.menu),
+            Row(
+              children: [
+                Builder(
+                  builder: (context) => IconButton(
+                    icon: const Icon(Icons.menu),
+                    color: Colors.black,
+                    onPressed: () {
+                      Scaffold.of(context).openDrawer();
+                    },
+                  ),
+                ),
+                IconButton(
+                icon: const Icon(Icons.sunny), 
                 color: Colors.black,
                 onPressed: () {
-                  Scaffold.of(context).openDrawer();
+                  _usuarioController.logout();
+                  Navigator.pushReplacement(
+                    context,
+                      MaterialPageRoute(
+                      builder: (context) => WeatherPage(usuario: widget.usuario),
+                    ),
+                  );
                 },
-              ),
+               ),
+              ],
             ),
             Text(
               "Olá ${widget.usuario.nome ?? ''}!",
                 style: TextStyle(
-                  color: Colors.grey[700],
-                  fontSize: 18,
+                  color: Colors.grey[800],
+                  fontSize: 17,
                   fontWeight: FontWeight.w500
                 ),
             ),
-            IconButton(
-              icon: const Icon(Icons.logout), 
-              color: Colors.black,
-              onPressed: () {
-                _usuarioController.logout();
-                Navigator.pushReplacement(
-                  context,
-                    MaterialPageRoute(
-                    builder: (context) => LoginPage(),
+            Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.location_on), 
+                  onPressed: (){
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Center(child: Text('Funcionalidade ainda não implementada!')),
+                        backgroundColor: Colors.red,
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  },
                   ),
-                );
-              },
+                IconButton(
+                  icon: const Icon(Icons.logout), 
+                  color: Colors.black,
+                  onPressed: () {
+                    _usuarioController.logout();
+                    Navigator.pushReplacement(
+                      context,
+                        MaterialPageRoute(
+                        builder: (context) => LoginPage(),
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
           ],
         ),

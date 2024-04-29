@@ -92,7 +92,7 @@ class LoginPage extends StatelessWidget {
                           content: Center(child: Text('Login bem-sucedido!')),
                           backgroundColor: Colors.green,
                           behavior: SnackBarBehavior.floating,
-                          duration: Duration(seconds: 1),
+                          duration: Duration(seconds: 2),
                         ),
                       );
                       Usuario usuario = (await _usuarioController.consultarUsuarioPorNome(nomeUsuario))!;
