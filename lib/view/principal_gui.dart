@@ -95,15 +95,16 @@ class _PrincipalPageState extends State<PrincipalPage> {
             Row(
               children: [
                 IconButton(
+                  color: Colors.transparent,
                   icon: const Icon(Icons.location_on), 
                   onPressed: (){
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Center(child: Text('Funcionalidade ainda não implementada!')),
-                        backgroundColor: Colors.red,
-                        behavior: SnackBarBehavior.floating,
-                      ),
-                    );
+                    // ScaffoldMessenger.of(context).showSnackBar(
+                    //   const SnackBar(
+                    //     content: Center(child: Text('Funcionalidade ainda não implementada!')),
+                    //     backgroundColor: Colors.red,
+                    //     behavior: SnackBarBehavior.floating,
+                    //   ),
+                    // );
                   },
                   ),
                 IconButton(

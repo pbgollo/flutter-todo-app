@@ -14,6 +14,7 @@ class WeatherService {
 
   WeatherService(this.apiKey);
 
+  // Busca os dados do tempo na API
   Future<Weather> getWeather(String cidade) async {
     final response = await http.get(Uri.parse('$BASE_URL?q=$cidade&appid=$apiKey&units=metric'));
 
@@ -24,6 +25,7 @@ class WeatherService {
     }
   }
 
+  // Busca a cidade de acordo com a localização atual
   Future<String> getCurrentCity() async {
     LocationPermission permission = await Geolocator.checkPermission();
     

@@ -19,7 +19,6 @@ dependencies:
   google_fonts: ^6.2.1
   http: ^1.2.1
   lottie: ^3.1.0
-  # flutter_native_timezone: ^1.0.0
 
 dev_dependencies:
   flutter_test:
