@@ -1,4 +1,4 @@
-# ToDo List
+# ToDo App
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/pbgollo/trabalho_mobile_1?style=for-the-badge)
 ![GitHub language count](https://img.shields.io/github/languages/count/pbgollo/trabalho_mobile_1?style=for-the-badge)
