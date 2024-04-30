@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:trabalho_1/components/todo_item.dart';
 import 'package:trabalho_1/control/audio_player_controller.dart';
 import 'package:trabalho_1/control/usuario_controller.dart';
@@ -62,6 +63,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
           children: [
             Row(
               children: [
+                // Botão do Menu Bar
                 Builder(
                   builder: (context) => IconButton(
                     icon: const Icon(Icons.menu),
@@ -71,6 +73,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
                     },
                   ),
                 ),
+                // Botão da previsão do tempo
                 IconButton(
                 icon: const Icon(Icons.sunny), 
                 color: Colors.black,
@@ -86,6 +89,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
                ),
               ],
             ),
+            // Texto de boas vindas
             Text(
               "Olá ${widget.usuario.nome ?? ''}!",
                 style: TextStyle(
@@ -96,31 +100,34 @@ class _PrincipalPageState extends State<PrincipalPage> {
             ),
             Row(
               children: [
-                IconButton(
-                  color: Colors.transparent,
-                  icon: const Icon(Icons.location_on), 
-                  onPressed: (){
-                    // ScaffoldMessenger.of(context).showSnackBar(
-                    //   const SnackBar(
-                    //     content: Center(child: Text('Funcionalidade ainda não implementada!')),
-                    //     backgroundColor: Colors.red,
-                    //     behavior: SnackBarBehavior.floating,
-                    //   ),
-                    // );
+                const SizedBox(
+                  height: 35,
+                  width: 35,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    abrirModalUsuario(context, widget.usuario);
                   },
-                  ),
-                IconButton(
-                  icon: const Icon(Icons.logout), 
-                  color: Colors.black,
-                  onPressed: () {
-                    _usuarioController.logout();
-                    Navigator.pushReplacement(
-                      context,
-                        MaterialPageRoute(
-                        builder: (context) => LoginPage(),
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: SizedBox(
+                      height: 35,
+                      width: 35,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: widget.usuario.imagem != null && widget.usuario.imagem!.isNotEmpty
+                            ? Image.network(
+                                widget.usuario.imagem!, 
+                                fit: BoxFit.cover, 
+                              )
+                            : const Icon(
+                                Icons.account_circle, 
+                                size: 35,
+                                color: Colors.grey,
+                              ),
                       ),
-                    );
-                  },
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -264,7 +271,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
                 // Barra de adicionar nova tarefa
                 Expanded(
                   child: Container(
-                    height: 50,
+                    height: 45,
                     margin: const EdgeInsets.only(
                       bottom: 20, 
                       right: 10, 
@@ -289,6 +296,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
                       decoration: const InputDecoration(
                         hintText: "Adicionar nova tarefa",
                         border: InputBorder.none,
+                        contentPadding: EdgeInsets.only(top: -11),
                       ),
                     ),
                   ),
@@ -580,6 +588,86 @@ class _PrincipalPageState extends State<PrincipalPage> {
                       grupoController.editarGrupo(grupo);
                     });
                     playerController.playAudio('audio/write.wav'); 
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // Abre um modal com as informações do usuário
+  void abrirModalUsuario(BuildContext context, Usuario usuario) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 18),
+              SizedBox(
+                height: 120,
+                width: 120,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(60),
+                  child: usuario.imagem != null && usuario.imagem!.isNotEmpty
+                      ? Image.network(
+                          usuario.imagem!, 
+                          fit: BoxFit.cover,
+                        )
+                      : const Icon(
+                          Icons.account_circle, 
+                          size: 120,
+                          color: Colors.grey,
+                        ),
+                ),
+              ),
+              IconButton(
+                  color: Colors.green, 
+                  iconSize: 30, 
+                  icon: const Icon(Icons.add_a_photo_outlined), 
+                  onPressed: () {
+                    // Implementar a funcionalidade de trocar a foto
+                  },
+              ),
+              const SizedBox(height: 16),
+              Text(
+                usuario.nome ?? '',
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                usuario.usuario ?? '',
+                style: const TextStyle(fontSize: 17, color: Colors.grey),
+              ),
+            ],
+          ),
+          actions: [
+            ButtonBar(
+              alignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  color: Colors.grey[700], 
+                  iconSize: 32, 
+                  icon: const Icon(Icons.logout), 
+                  onPressed: () {
+                    _usuarioController.logout();
+                    Navigator.pushReplacement(
+                      context,
+                        MaterialPageRoute(
+                        builder: (context) => LoginPage(),
+                      ),
+                    );
+                  },
+                ),
+                IconButton(
+                  color: Colors.red, 
+                  iconSize: 36, 
+                  icon: const Icon(Icons.close_rounded), 
+                  onPressed: () {
                     Navigator.of(context).pop();
                   },
                 ),

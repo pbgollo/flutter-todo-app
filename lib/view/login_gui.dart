@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:trabalho_1/components/botao_login.dart';
-import 'package:trabalho_1/components/botao_google.dart';
+import 'package:trabalho_1/components/botao_redes.dart';
 import 'package:trabalho_1/components/text_field.dart';
 import 'package:trabalho_1/control/usuario_controller.dart';
 import 'package:trabalho_1/model/usuario.dart';

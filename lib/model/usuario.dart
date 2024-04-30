@@ -3,6 +3,7 @@ class Usuario {
   String? nome;
   String? usuario;
   String? senha;
+  String? imagem;
   
   Usuario({
     this.id,
