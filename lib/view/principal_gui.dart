@@ -398,7 +398,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
         todo.estado = todo.estado==1?0:1;
       });
       if (todo.estado == 1) {
-        playerController.playAudio('audio/reward.wav'); 
+        playerController.playAudio('audio/correct.wav'); 
         print("Entrou");
       }
     }).catchError((error) {
