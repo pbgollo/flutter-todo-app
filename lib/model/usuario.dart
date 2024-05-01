@@ -10,6 +10,7 @@ class Usuario {
     this.nome,
     this.usuario,
     this.senha,
+    this.imagem,
   });
   
   Map<String, Object?> toMap() {
@@ -18,6 +19,7 @@ class Usuario {
       'nome': nome,
       'usuario': usuario,
       'senha': senha,
+      'imagem': imagem,
     };
   }
 
@@ -27,6 +29,7 @@ class Usuario {
       nome: map['nome'] as String?,
       usuario: map['usuario'] as String?,
       senha: map['senha'] as String?,
+      imagem: map['imagem'] as String?,
     );
   }
 

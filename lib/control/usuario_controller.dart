@@ -92,6 +92,7 @@ class UsuarioController {
             nome: user.displayName ?? '',
             usuario: user.email ?? '',
             senha: 'master',
+            imagem: user.photoURL ?? '',
           );
           await adicionarUsuario(novoUsuario);
           return novoUsuario;

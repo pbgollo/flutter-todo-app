@@ -1,7 +1,8 @@
 // ignore_for_file: avoid_print
 
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:trabalho_1/components/todo_item.dart';
 import 'package:trabalho_1/control/audio_player_controller.dart';
 import 'package:trabalho_1/control/usuario_controller.dart';
@@ -32,10 +33,13 @@ class _PrincipalPageState extends State<PrincipalPage> {
   final GrupoController grupoController = GrupoController();
   final UsuarioController _usuarioController = UsuarioController();
   final AudioPlayerController playerController = AudioPlayerController();
+  final imagePicker = ImagePicker();
 
   List<Tarefa> todoList = [];
   List<Tarefa> todoListFiltrada = [];
   List<Grupo> groupList = [];
+
+  File? imageFile;
 
   @override
   void initState() {
@@ -110,23 +114,23 @@ class _PrincipalPageState extends State<PrincipalPage> {
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(right: 8),
-                    child: SizedBox(
-                      height: 35,
-                      width: 35,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: widget.usuario.imagem != null && widget.usuario.imagem!.isNotEmpty
-                            ? Image.network(
-                                widget.usuario.imagem!, 
-                                fit: BoxFit.cover, 
+                      child: SizedBox(
+                        height: 35,
+                        width: 35,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: widget.usuario.imagem != null && widget.usuario.imagem!.isNotEmpty
+                            ? Image.file(
+                                File(widget.usuario.imagem!),  
+                                fit: BoxFit.cover,
                               )
                             : const Icon(
-                                Icons.account_circle, 
+                                Icons.account_circle,
                                 size: 35,
                                 color: Colors.grey,
                               ),
+                        ),
                       ),
-                    ),
                   ),
                 ),
               ],
@@ -407,7 +411,6 @@ class _PrincipalPageState extends State<PrincipalPage> {
       });
       if (todo.estado == 1) {
         playerController.playAudio('audio/correct.wav'); 
-        print("Entrou");
       }
     }).catchError((error) {
       print("Erro ao mudar estado da tarefa: $error");
@@ -445,7 +448,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
     });
   }
 
-  // Adiciona uma novo grupo
+  // Adiciona um novo grupo
   void adicionarGrupo(String descricao) {
     if (descricao.isNotEmpty) {
       grupoController.adicionarGrupo(descricao, widget.usuario).then((value) {
@@ -608,31 +611,44 @@ class _PrincipalPageState extends State<PrincipalPage> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const SizedBox(height: 18),
+              const SizedBox(height: 20),
               SizedBox(
                 height: 120,
                 width: 120,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(60),
-                  child: usuario.imagem != null && usuario.imagem!.isNotEmpty
-                      ? Image.network(
-                          usuario.imagem!, 
-                          fit: BoxFit.cover,
-                        )
-                      : const Icon(
-                          Icons.account_circle, 
-                          size: 120,
-                          color: Colors.grey,
+                child: Stack(
+                  children: [
+                    CircleAvatar(
+                      radius: 65,
+                      backgroundColor: Colors.grey[300],
+                      backgroundImage: usuario.imagem != null && usuario.imagem!.isNotEmpty
+                        ? FileImage(File(usuario.imagem!))
+                        : null,
+                      child: usuario.imagem == null || usuario.imagem!.isEmpty
+                        ? const Icon(
+                            Icons.account_circle,
+                            size: 120,
+                            color: Colors.grey,
+                          )
+                        : null, 
+                    ),
+                    Positioned(
+                      bottom: 5,
+                      right: 5,
+                      child: CircleAvatar(
+                        backgroundColor: Colors.grey[300],
+                        child: IconButton(
+                          onPressed: (){
+                            exibeBottomSheet(context);
+                          },
+                          icon: Icon(
+                            Icons.edit,
+                            color: Colors.grey[600],
+                          ),
                         ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              IconButton(
-                  color: Colors.green, 
-                  iconSize: 30, 
-                  icon: const Icon(Icons.add_a_photo_outlined), 
-                  onPressed: () {
-                    // Implementar a funcionalidade de trocar a foto
-                  },
               ),
               const SizedBox(height: 16),
               Text(
@@ -657,16 +673,16 @@ class _PrincipalPageState extends State<PrincipalPage> {
                     _usuarioController.logout();
                     Navigator.pushReplacement(
                       context,
-                        MaterialPageRoute(
+                      MaterialPageRoute(
                         builder: (context) => LoginPage(),
                       ),
                     );
                   },
                 ),
                 IconButton(
-                  color: Colors.red, 
+                  color: Colors.green, 
                   iconSize: 36, 
-                  icon: const Icon(Icons.close_rounded), 
+                  icon: const Icon(Icons.check_rounded), 
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
@@ -678,4 +694,100 @@ class _PrincipalPageState extends State<PrincipalPage> {
       },
     );
   }
+
+// Método que seleciona a imagem da câmera/galeria do usuário
+void pegarImagem(ImageSource source) async {
+  final pickedFile = await imagePicker.pickImage(source: source);
+
+  if (pickedFile != null) {
+    setState(() {
+      widget.usuario.imagem = pickedFile.path;
+    });
+  }
+
+  Navigator.pop(context);
+  abrirModalUsuario(context, widget.usuario);
+}
+
+// Exibe as opções de manipulação da imagem
+void exibeBottomSheet(BuildContext context) {
+  showModalBottomSheet(
+    context: context,
+    builder: (_) {
+      return Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: CircleAvatar(
+                backgroundColor: Colors.grey[200],
+                child: Center(
+                  child: Icon(
+                    Icons.add_photo_alternate_outlined,
+                    color: Colors.grey[500],
+                  ),
+                ),
+              ),
+              title: Text(
+                'Galeria',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              onTap: () {
+                Navigator.of(context).pop();
+                // Buscar imagem da galeria
+                pegarImagem(ImageSource.gallery);
+              },
+            ),
+            ListTile(
+              leading: CircleAvatar(
+                backgroundColor: Colors.grey[200],
+                child: Center(
+                  child: Icon(
+                    Icons.add_a_photo_outlined,
+                    color: Colors.grey[500],
+                  ),
+                ),
+              ),
+              title: Text(
+                'Câmera',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              onTap: () {
+                Navigator.of(context).pop();
+                // Fazer foto da câmera
+                pegarImagem(ImageSource.camera);
+              },
+            ),
+            ListTile(
+              leading: CircleAvatar(
+                backgroundColor: Colors.grey[200],
+                child: Center(
+                  child: Icon(
+                    Icons.delete_outline,
+                    color: Colors.grey[500],
+                  ),
+                ),
+              ),
+              title: Text(
+                'Remover',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              onTap: () {
+                Navigator.of(context).pop();
+                // Tornar a foto null
+                setState(() {
+                  widget.usuario.imagem = null;
+                });
+                Navigator.pop(context);
+                abrirModalUsuario(context, widget.usuario);
+              },
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
 }
