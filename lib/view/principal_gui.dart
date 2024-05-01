@@ -114,23 +114,28 @@ class _PrincipalPageState extends State<PrincipalPage> {
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(right: 8),
-                      child: SizedBox(
-                        height: 35,
-                        width: 35,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: widget.usuario.imagem != null && widget.usuario.imagem!.isNotEmpty
-                            ? Image.file(
-                                File(widget.usuario.imagem!),  
-                                fit: BoxFit.cover,
-                              )
-                            : const Icon(
-                                Icons.account_circle,
-                                size: 35,
-                                color: Colors.grey,
-                              ),
-                        ),
+                    child: SizedBox(
+                      height: 35,
+                      width: 35,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: widget.usuario.imagem != null && widget.usuario.imagem!.isNotEmpty
+                          ? widget.usuario.imagem!.startsWith('https://') || widget.usuario.imagem!.startsWith('http://')
+                              ? Image.network(
+                                  widget.usuario.imagem!,  
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.file(
+                                  File(widget.usuario.imagem!),  
+                                  fit: BoxFit.cover,
+                                )
+                          : const Icon(
+                              Icons.account_circle,
+                              size: 35,
+                              color: Colors.grey,
+                            ),
                       ),
+                    ),
                   ),
                 ),
               ],
@@ -366,7 +371,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
         ),
       );
     } else {
-      return const Text('Nenhum grupo disponível!');
+      return const Text('');
     }
   }
 
@@ -620,16 +625,24 @@ class _PrincipalPageState extends State<PrincipalPage> {
                     CircleAvatar(
                       radius: 65,
                       backgroundColor: Colors.grey[300],
-                      backgroundImage: usuario.imagem != null && usuario.imagem!.isNotEmpty
-                        ? FileImage(File(usuario.imagem!))
-                        : null,
-                      child: usuario.imagem == null || usuario.imagem!.isEmpty
+                      backgroundImage: (() {
+                        if (widget.usuario.imagem != null && widget.usuario.imagem!.isNotEmpty) {
+                          if (widget.usuario.imagem!.startsWith('https://') || widget.usuario.imagem!.startsWith('http://')) {
+                            return NetworkImage(widget.usuario.imagem!);
+                          } else {
+                            return FileImage(File(widget.usuario.imagem!));
+                          }
+                        } else {
+                          return null;
+                        }
+                      })() as ImageProvider<Object>?,
+                      child: widget.usuario.imagem == null || widget.usuario.imagem!.isEmpty
                         ? const Icon(
                             Icons.account_circle,
                             size: 120,
                             color: Colors.grey,
                           )
-                        : null, 
+                        : null,
                     ),
                     Positioned(
                       bottom: 5,
@@ -702,9 +715,9 @@ void pegarImagem(ImageSource source) async {
   if (pickedFile != null) {
     setState(() {
       widget.usuario.imagem = pickedFile.path;
+      _usuarioController.atualizarImagemUsuario(widget.usuario.usuario!, pickedFile.path);
     });
   }
-
   Navigator.pop(context);
   abrirModalUsuario(context, widget.usuario);
 }
@@ -781,6 +794,7 @@ void exibeBottomSheet(BuildContext context) {
                 });
                 Navigator.pop(context);
                 abrirModalUsuario(context, widget.usuario);
+                _usuarioController.atualizarImagemUsuario(widget.usuario.usuario!, "");
               },
             ),
           ],

@@ -111,4 +111,30 @@ class UsuarioController {
     _authService.logOut();
   }
 
+  Future<bool> atualizarImagemUsuario(String usuario, String novaImagem) async {
+    try {
+      final Database db = await _bancoHelper.database;
+
+      Map<String, dynamic> updates = {
+        'imagem': novaImagem,
+      };
+
+      int rowsUpdated = await db.update(
+        'usuario',
+        updates,
+        where: 'usuario = ?',
+        whereArgs: [usuario],
+      );
+
+      if (rowsUpdated > 0) {
+        return true;
+      } else {
+        return false;
+      }
+      
+    } catch (e) {
+      return false;
+    }
+  }
+
 }

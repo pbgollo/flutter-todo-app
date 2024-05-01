@@ -3,7 +3,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class BancoHelper {
-  static const arquivoDoBancoDeDados = 'nossoBanco.db';
+  static const arquivoDoBancoDeDados = 'novoBanco.db';
   static const arquivoDoBancoDeDadosVersao = 4;
 
   BancoHelper._privateConstructor();
@@ -34,7 +34,8 @@ class BancoHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         nome TEXT NOT NULL,
         usuario TEXT NOT NULL,
-        senha TEXT NOT NULL
+        senha TEXT NOT NULL,
+        imagem TEXT
       )
     ''');
 
@@ -63,14 +64,7 @@ class BancoHelper {
   Future<void> _atualizarBanco(Database db, int oldVersion, int newVersion) async {
     // Lógica atualizar o banco de dados para versões mais recentes
     if (oldVersion < 3) {
-      await db.execute('''
-        CREATE TABLE grupo (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          nome TEXT NOT NULL,
-          id_usuario INT NOT NULL,
-          FOREIGN KEY (id_usuario) REFERENCES usuario(id) ON DELETE CASCADE
-        )
-      ''');
+
     }
   }
 
