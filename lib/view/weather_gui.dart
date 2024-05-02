@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:trabalho_1/model/usuario.dart';
 import 'package:trabalho_1/model/weather.dart';
 import 'package:trabalho_1/services/weather_service.dart';
@@ -41,12 +42,15 @@ class _WeatherPageState extends State<WeatherPage> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PrincipalPage(usuario: widget.usuario),
-                        ),
-                      );
+              Navigator.pushReplacement(
+              context,
+              PageTransition(
+                child: PrincipalPage(usuario: widget.usuario), 
+                type: PageTransitionType.bottomToTop,
+                duration: const Duration(milliseconds: 600),
+                reverseDuration: const Duration(milliseconds: 600),
+                ),
+              );
             },
           ),
         ),

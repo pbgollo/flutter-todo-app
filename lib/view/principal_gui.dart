@@ -3,6 +3,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:trabalho_1/components/todo_item.dart';
 import 'package:trabalho_1/control/audio_player_controller.dart';
 import 'package:trabalho_1/control/usuario_controller.dart';
@@ -85,8 +86,11 @@ class _PrincipalPageState extends State<PrincipalPage> {
                   _usuarioController.logout();
                   Navigator.pushReplacement(
                     context,
-                      MaterialPageRoute(
-                      builder: (context) => WeatherPage(usuario: widget.usuario),
+                    PageTransition(
+                      child: WeatherPage(usuario: widget.usuario), 
+                      type: PageTransitionType.topToBottom,
+                      duration: const Duration(milliseconds: 600),
+                      reverseDuration: const Duration(milliseconds: 600),
                     ),
                   );
                 },
@@ -687,8 +691,12 @@ class _PrincipalPageState extends State<PrincipalPage> {
                     _usuarioController.logout();
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => LoginPage(),
+                      PageTransition(
+                        child: LoginPage(), 
+                        type: PageTransitionType.size,
+                        alignment: Alignment.center,
+                        duration: const Duration(milliseconds: 600),
+                        reverseDuration: const Duration(milliseconds: 600),                 
                       ),
                     );
                   },

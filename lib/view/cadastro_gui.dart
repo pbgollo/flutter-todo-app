@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:trabalho_1/components/botao_login.dart';
 import 'package:trabalho_1/components/text_field.dart';
 import 'package:trabalho_1/control/usuario_controller.dart';
@@ -128,7 +129,12 @@ class RegisterPage extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => LoginPage()),
+                      PageTransition(
+                        child: LoginPage(), 
+                        type: PageTransitionType.leftToRight,
+                        duration: const Duration(milliseconds: 200),
+                        reverseDuration: const Duration(milliseconds: 200),
+                      ),
                   );
                 },
                 child: Row(

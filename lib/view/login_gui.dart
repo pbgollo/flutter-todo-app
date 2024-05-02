@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously, avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:trabalho_1/components/botao_login.dart';
 import 'package:trabalho_1/components/botao_redes.dart';
 import 'package:trabalho_1/components/text_field.dart';
@@ -98,9 +99,13 @@ class LoginPage extends StatelessWidget {
                       Usuario usuario = (await _usuarioController.consultarUsuarioPorNome(nomeUsuario))!;
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => PrincipalPage(usuario: usuario),
-                        ),
+                          PageTransition(
+                            child: PrincipalPage(usuario: usuario), 
+                            type: PageTransitionType.size,
+                            alignment: Alignment.center,
+                            duration: const Duration(milliseconds: 600),
+                            reverseDuration: const Duration(milliseconds: 600),
+                          ),
                       );
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -154,8 +159,12 @@ class LoginPage extends StatelessWidget {
                       if (usuario != null) {
                         Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => PrincipalPage(usuario: usuario),
+                          PageTransition(
+                            child: PrincipalPage(usuario: usuario), 
+                            type: PageTransitionType.size,
+                            alignment: Alignment.center,
+                            duration: const Duration(milliseconds: 600),
+                            reverseDuration: const Duration(milliseconds: 600),
                           ),
                         );
                       } else {
@@ -185,7 +194,12 @@ class LoginPage extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => RegisterPage()),
+                      PageTransition(
+                        child: RegisterPage(), 
+                        type: PageTransitionType.rightToLeft,
+                        duration: const Duration(milliseconds: 200),
+                        reverseDuration: const Duration(milliseconds: 200),
+                      ),
                     );
                   },
                 child: Row(
