@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -219,6 +219,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
                   },
                   backgroundColor: const Color.fromARGB(255, 147, 212, 74),
                   child: const Icon(
+                    color: Colors.white,
                     Icons.add,
                     size: 24,
                   ),
@@ -470,7 +471,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
     }
   }
   
-  // Dialog para adicionar um novo grupo de tarefas
+  // Modal para adicionar um novo grupo de tarefas
   void alertAdicionarGrupo() {
     TextEditingController controller = TextEditingController();
     showDialog(
@@ -523,7 +524,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
     );
   } 
 
-  // Deleta um grupo
+  // Função para deletar um grupo do menu
   void deletarGrupo(Grupo grupo){
     grupoController.deletarGrupo(grupo).then((success) {
       playerController.playAudio('audio/delete.wav');
@@ -550,7 +551,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
     });
   }
 
-  // Função para editar um item do menu
+  // Modal para editar um grupo do menu
   void editarItemMenu(Grupo grupo) {
     TextEditingController controller = TextEditingController(text: grupo.nome);
     showDialog(
@@ -645,7 +646,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
                         : null,
                     ),
                     Positioned(
-                      bottom: 5,
+                      bottom: 0,
                       right: 5,
                       child: CircleAvatar(
                         backgroundColor: Colors.grey[300],
@@ -708,100 +709,100 @@ class _PrincipalPageState extends State<PrincipalPage> {
     );
   }
 
-// Método que seleciona a imagem da câmera/galeria do usuário
-void pegarImagem(ImageSource source) async {
-  final pickedFile = await imagePicker.pickImage(source: source);
+  // Método que seleciona a imagem da câmera/galeria do usuário
+  void pegarImagem(ImageSource source) async {
+    final pickedFile = await imagePicker.pickImage(source: source);
 
-  if (pickedFile != null) {
-    setState(() {
-      widget.usuario.imagem = pickedFile.path;
-      _usuarioController.atualizarImagemUsuario(widget.usuario.usuario!, pickedFile.path);
-    });
+    if (pickedFile != null) {
+      setState(() {
+        widget.usuario.imagem = pickedFile.path;
+        _usuarioController.atualizarImagemUsuario(widget.usuario.usuario!, pickedFile.path);
+      });
+    }
+    Navigator.pop(context);
+    abrirModalUsuario(context, widget.usuario);
   }
-  Navigator.pop(context);
-  abrirModalUsuario(context, widget.usuario);
-}
 
-// Exibe as opções de manipulação da imagem
-void exibeBottomSheet(BuildContext context) {
-  showModalBottomSheet(
-    context: context,
-    builder: (_) {
-      return Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: CircleAvatar(
-                backgroundColor: Colors.grey[200],
-                child: Center(
-                  child: Icon(
-                    Icons.add_photo_alternate_outlined,
-                    color: Colors.grey[500],
+  // Exibe as opções de manipulação da imagem
+  void exibeBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (_) {
+        return Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: Colors.grey[200],
+                  child: Center(
+                    child: Icon(
+                      Icons.add_photo_alternate_outlined,
+                      color: Colors.grey[500],
+                    ),
                   ),
                 ),
+                title: Text(
+                  'Galeria',
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  // Buscar imagem da galeria
+                  pegarImagem(ImageSource.gallery);
+                },
               ),
-              title: Text(
-                'Galeria',
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-              onTap: () {
-                Navigator.of(context).pop();
-                // Buscar imagem da galeria
-                pegarImagem(ImageSource.gallery);
-              },
-            ),
-            ListTile(
-              leading: CircleAvatar(
-                backgroundColor: Colors.grey[200],
-                child: Center(
-                  child: Icon(
-                    Icons.add_a_photo_outlined,
-                    color: Colors.grey[500],
+              ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: Colors.grey[200],
+                  child: Center(
+                    child: Icon(
+                      Icons.add_a_photo_outlined,
+                      color: Colors.grey[500],
+                    ),
                   ),
                 ),
+                title: Text(
+                  'Câmera',
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  // Fazer foto da câmera
+                  pegarImagem(ImageSource.camera);
+                },
               ),
-              title: Text(
-                'Câmera',
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-              onTap: () {
-                Navigator.of(context).pop();
-                // Fazer foto da câmera
-                pegarImagem(ImageSource.camera);
-              },
-            ),
-            ListTile(
-              leading: CircleAvatar(
-                backgroundColor: Colors.grey[200],
-                child: Center(
-                  child: Icon(
-                    Icons.delete_outline,
-                    color: Colors.grey[500],
+              ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: Colors.grey[200],
+                  child: Center(
+                    child: Icon(
+                      Icons.delete_outline,
+                      color: Colors.grey[500],
+                    ),
                   ),
                 ),
+                title: Text(
+                  'Remover',
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  // Tornar a foto null
+                  setState(() {
+                    widget.usuario.imagem = null;
+                  });
+                  Navigator.pop(context);
+                  abrirModalUsuario(context, widget.usuario);
+                  _usuarioController.atualizarImagemUsuario(widget.usuario.usuario!, "");
+                },
               ),
-              title: Text(
-                'Remover',
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-              onTap: () {
-                Navigator.of(context).pop();
-                // Tornar a foto null
-                setState(() {
-                  widget.usuario.imagem = null;
-                });
-                Navigator.pop(context);
-                abrirModalUsuario(context, widget.usuario);
-                _usuarioController.atualizarImagemUsuario(widget.usuario.usuario!, "");
-              },
-            ),
-          ],
-        ),
-      );
-    },
-  );
-}
+            ],
+          ),
+        );
+      },
+    );
+  }
 
 }
