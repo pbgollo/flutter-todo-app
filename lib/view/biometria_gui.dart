@@ -53,16 +53,14 @@ class _BiometricPageState extends State<BiometricPage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-        
             const SizedBox(height: 20),
-
+            // Ícone de cadeado
             Icon(Icons.lock,
               color: Colors.grey[500], 
               size: 25,
             ),
-
             const SizedBox(height: 5),
-
+            // Texto da autenticação
             Text(
               "Autenticação Biométrica",
               style: GoogleFonts.bebasNeue(
@@ -71,17 +69,15 @@ class _BiometricPageState extends State<BiometricPage> {
                 color: Colors.grey[500], 
               ),
             ),
-
             const SizedBox(height: 100),
-
+            // Animação da digital
             Lottie.asset(
               "assets/animation/fingerprint.json",
               width: 160, 
               height: 160,
             ),
-
             const SizedBox(height: 100),
-            
+            // Texto de use a biometria
             Text(
               "Use sua biometria para prosseguir!",
               style: GoogleFonts.bebasNeue(
@@ -90,58 +86,71 @@ class _BiometricPageState extends State<BiometricPage> {
                 color: Colors.grey[500], 
               ),
             ),
-
             const SizedBox(height: 15),
-
-            ElevatedButton(
-              onPressed: () async {
-                bool autenticado = await _usuarioController.solicitaBiometria();
-                if (autenticado) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Center(child: Text('Autenticação bem-sucedida!')),
-                      backgroundColor: Colors.green,
-                      behavior: SnackBarBehavior.floating,
-                      duration: Duration(seconds: 2),
-                    ),
-                  );
-                  Navigator.pushReplacement(
-                    context,
-                    PageTransition(
-                      child: PrincipalPage(usuario: widget.usuario),
-                      type: PageTransitionType.size,
-                      alignment: Alignment.center,
-                      duration: const Duration(milliseconds: 600),
-                      reverseDuration: const Duration(milliseconds: 600),
-                    ),
-                  );
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Center(child: Text('Autenticação biométrica falhou!')),
-                      backgroundColor: Colors.red,
-                      behavior: SnackBarBehavior.floating,
-                    ),
-                  );
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blueAccent,
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
+            // Botão que verifica a impressão digital
+            SizedBox(
+              width: 140,
+              child: ElevatedButton(
+                onPressed: () async {
+                  bool autenticado = await _usuarioController.solicitaBiometria();
+                  if (autenticado) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Center(child: Text('Autenticação bem-sucedida!')),
+                        backgroundColor: Colors.green,
+                        behavior: SnackBarBehavior.floating,
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                    Navigator.pushReplacement(
+                      context,
+                      PageTransition(
+                        child: PrincipalPage(usuario: widget.usuario),
+                        type: PageTransitionType.size,
+                        alignment: Alignment.center,
+                        duration: const Duration(milliseconds: 600),
+                        reverseDuration: const Duration(milliseconds: 600),
+                      ),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Center(child: Text('Autenticação biométrica falhou!')),
+                        backgroundColor: Colors.red,
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueAccent,
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
                 ),
-              ),
-              child: Text(
-                "Verificar",
-                style: GoogleFonts.bebasNeue(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+                child: 
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                         Icons.fingerprint,
+                         size: 26,
+                        color: Colors.white,
+                      ),
+                      const SizedBox(width: 5), 
+                      Text(
+                        "Verificar",
+                        style: GoogleFonts.bebasNeue(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
               ),
             ),
-
           ],
         ),
       ),  

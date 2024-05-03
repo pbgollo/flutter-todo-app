@@ -42,4 +42,5 @@ class WeatherService {
 
     return cidade ?? "";
   }
+  
 }

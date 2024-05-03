@@ -77,7 +77,6 @@ class LoginPage extends StatelessWidget {
                 onTap: () async {
                   String nomeUsuario = usuarioController.text;
                   String senha = senhaController.text;
-
                   if (nomeUsuario.isEmpty || senha.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
@@ -90,6 +89,7 @@ class LoginPage extends StatelessWidget {
                     bool usuarioValido = await _usuarioController.validarUsuario(nomeUsuario, senha);
                     if (usuarioValido) {
                       Usuario usuario = (await _usuarioController.consultarUsuarioPorNome(nomeUsuario))!;
+                      // Verifica se a biometria está ativada para o usuário
                       bool possuiBiometria = await _usuarioController.verificaSeguranca(usuario);   
                       if (possuiBiometria) {
                         Navigator.pushReplacement(
@@ -163,7 +163,7 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 30),
-              // Botão do Google
+              // Botão do Google e GitHub
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -171,19 +171,38 @@ class LoginPage extends StatelessWidget {
                     onTap: () async {
                       Usuario? usuario = await _usuarioController.signInWithGoogle();
                       if (usuario != null) {
-                        _usuarioController.verificaSeguranca(usuario); 
-                        Navigator.pushReplacement(
-                          context,
-                          PageTransition(
-                            child: PrincipalPage(usuario: usuario), 
-                            type: PageTransitionType.size,
-                            alignment: Alignment.center,
-                            duration: const Duration(milliseconds: 600),
-                            reverseDuration: const Duration(milliseconds: 600),
-                          ),
-                        );
+                        // Verifica se a biometria está ativada para o usuário
+                        bool possuiBiometria = await _usuarioController.verificaSeguranca(usuario);   
+                        if (possuiBiometria) {
+                          Navigator.pushReplacement(
+                            context,
+                              PageTransition(
+                                child: BiometricPage(usuario: usuario), 
+                                type: PageTransitionType.topToBottom,
+                                duration: const Duration(milliseconds: 600),
+                                reverseDuration: const Duration(milliseconds: 600),
+                              ),
+                          );
                       } else {
-                        print('Falha ao fazer login com o Google');
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Center(child: Text('Login bem-sucedido!')),
+                            backgroundColor: Colors.green,
+                            behavior: SnackBarBehavior.floating,
+                            duration: Duration(seconds: 2),
+                          ),
+                        ); 
+                          Navigator.pushReplacement(
+                            context,
+                            PageTransition(
+                              child: PrincipalPage(usuario: usuario), 
+                              type: PageTransitionType.size,
+                              alignment: Alignment.center,
+                              duration: const Duration(milliseconds: 600),
+                              reverseDuration: const Duration(milliseconds: 600),
+                            ),
+                          );
+                        }                 
                       }
                     },
                     imagePath: 'assets/images/google.png'

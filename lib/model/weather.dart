@@ -16,4 +16,5 @@ class Weather {
       condicao: json['weather'][0]['main'],
     );
   }
+  
 }

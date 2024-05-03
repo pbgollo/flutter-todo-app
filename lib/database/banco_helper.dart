@@ -3,7 +3,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class BancoHelper {
-  static const arquivoDoBancoDeDados = 'novoBanco3.db';
+  static const arquivoDoBancoDeDados = 'novoBanco.db';
   static const arquivoDoBancoDeDadosVersao = 4;
 
   BancoHelper._privateConstructor();

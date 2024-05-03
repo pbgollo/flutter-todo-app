@@ -29,7 +29,6 @@ class _PrincipalPageState extends State<PrincipalPage> {
 
   final tarefaPesquisaController = TextEditingController();
   final tarefaTextController = TextEditingController();
-
   final TarefaController tarefaController = TarefaController();
   final GrupoController grupoController = GrupoController();
   final UsuarioController _usuarioController = UsuarioController();
@@ -105,6 +104,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
                   fontWeight: FontWeight.w500
                 ),
             ),
+            // Ícone do perfil do usuário
             Row(
               children: [
                 const SizedBox(
@@ -682,6 +682,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
             ButtonBar(
               alignment: MainAxisAlignment.center,
               children: [
+                // Botão de logout
                 IconButton(
                   color: Colors.grey[700], 
                   iconSize: 32, 
@@ -700,6 +701,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
                     );
                   },
                 ),
+                // Botão da biometria
                 IconButton(
                   color: () {
                     if (widget.usuario.seguranca != null && widget.usuario.seguranca == 1) {
@@ -746,6 +748,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
                     _usuarioController.atualizarSeguranca(widget.usuario.usuario!, widget.usuario.seguranca!);         
                   },
                 ),
+                // Botão de ok
                 IconButton(
                   color: Colors.green, 
                   iconSize: 36, 
@@ -765,7 +768,6 @@ class _PrincipalPageState extends State<PrincipalPage> {
   // Método que seleciona a imagem da câmera/galeria do usuário
   void pegarImagem(ImageSource source) async {
     final pickedFile = await imagePicker.pickImage(source: source);
-
     if (pickedFile != null) {
       setState(() {
         widget.usuario.imagem = pickedFile.path;

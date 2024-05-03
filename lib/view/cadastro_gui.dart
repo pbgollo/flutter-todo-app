@@ -63,7 +63,7 @@ class RegisterPage extends StatelessWidget {
                 obscureText: true
               ),
               const SizedBox(height: 10),
-              // Texto termos e condicoes
+              // Texto termos e condições
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Row(

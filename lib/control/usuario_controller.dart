@@ -86,14 +86,11 @@ class UsuarioController {
       if (userCredential != null) {
         User? user = userCredential.user;
         print('Usuário logado: ${user?.displayName} (${user?.email})');
-
         // Testar se o usuário já existe no banco de dados local
         Usuario? usuarioExistente = await consultarUsuarioPorNome(user!.email ?? '');
-        
         if (usuarioExistente != null) {
           return usuarioExistente;
         } else {
-          // Se o usuário não existir, deve ser cadastrado
           Usuario novoUsuario = Usuario(
             nome: user.displayName ?? '',
             usuario: user.email ?? '',
@@ -169,9 +166,9 @@ class UsuarioController {
     }
   }
 
+  // Solicita a biometria para o usuário
   Future<bool> solicitaBiometria() async {
     try {
-      _biometria.getAvailableBiometrics();
       bool autenticado = await _biometria.authenticate(
         localizedReason: "Biometria ativada para sua conta.",
         options: const AuthenticationOptions(
@@ -190,6 +187,7 @@ class UsuarioController {
     }
   }
 
+  // Verifica se o celular possui suporte à biometria
   Future<bool> verificaSuporteBiometria() async {
     bool suportaBiometria = await _biometria.isDeviceSupported();
     if (suportaBiometria) {

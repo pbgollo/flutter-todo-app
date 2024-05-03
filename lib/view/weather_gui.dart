@@ -60,17 +60,13 @@ class _WeatherPageState extends State<WeatherPage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-        
             const SizedBox(height: 20),
-
             // Ícone de localização
             Icon(Icons.location_on,
               color: Colors.grey[500], 
               size: 25,
             ),
-
             const SizedBox(height: 5),
-
             // Texto do nome da cidade
             Text(
               (_weather?.cidade ?? "Carregando a cidade...").toUpperCase(),
@@ -80,14 +76,10 @@ class _WeatherPageState extends State<WeatherPage> {
                 color: Colors.grey[500], 
               ),
             ),
-
             const SizedBox(height: 90),
-
             // Animação da condição climática
             Lottie.asset(isDaytime() ? getWeatherAnimationDay(_weather?.condicao) : getWeatherAnimationNight(_weather?.condicao)),
-
-            const SizedBox(height: 110),
-            
+            const SizedBox(height: 110),      
             // Texto da temperatura
             Text(
               ("${_weather?.temperatura.round()}°C").toUpperCase(),
@@ -97,7 +89,6 @@ class _WeatherPageState extends State<WeatherPage> {
                 color: Colors.grey[700], 
               ),
             ),
-
             // Texto da condição climática
             Text(
               (getWeatherText(_weather?.condicao)).toUpperCase(),
@@ -106,7 +97,6 @@ class _WeatherPageState extends State<WeatherPage> {
                 fontWeight: FontWeight.w400, 
                 color: Colors.grey[500], 
               ),
-
             ),
           ],
         ),
@@ -117,7 +107,6 @@ class _WeatherPageState extends State<WeatherPage> {
   // Busca as condições climáticas na API
   _fetchWeather() async {
     String cidade = await _weatherService.getCurrentCity();
-
     try {
       final weather = await _weatherService.getWeather(cidade);
       setState(() {
@@ -135,14 +124,12 @@ class _WeatherPageState extends State<WeatherPage> {
     int currentHour = now.hour;
     int sunriseHour = 6; 
     int sunsetHour = 18; 
-
     return currentHour >= sunriseHour && currentHour < sunsetHour;
   }
 
   // Retorna as animações do dia de acordo com a condição
   String getWeatherAnimationDay(String? condicao) {
     if(condicao == null) return "assets/animation/sol-loading.json";
-
     switch(condicao.toLowerCase()){
       case "clouds":
       case "mist":
@@ -167,7 +154,6 @@ class _WeatherPageState extends State<WeatherPage> {
   // Retorna as animações da noite de acordo com a condição
   String getWeatherAnimationNight(String? condicao) {
     if(condicao == null) return "assets/animation/lua-loading.json";
-
     switch(condicao.toLowerCase()){
       case "clouds":
       case "mist":
@@ -192,7 +178,6 @@ class _WeatherPageState extends State<WeatherPage> {
   // Retorna o texto de acordo com a condição
   String getWeatherText(String? condicao) {
     if(condicao == null) return "Buscando informações...";
-
     switch(condicao.toLowerCase()){
       case "clouds":
       case "mist":

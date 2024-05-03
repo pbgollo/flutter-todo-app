@@ -7,7 +7,7 @@ import 'package:trabalho_1/model/tarefa.dart';
 import 'package:trabalho_1/model/usuario.dart';
 
 class TarefaController {
-  final BancoHelper _bancoHelper = BancoHelper.instance; // Instância do BancoHelper
+  final BancoHelper _bancoHelper = BancoHelper.instance; 
 
   // Altera o estado da tarefa entre feita e não feita
   Future<bool> mudarEstado(Tarefa tarefa) async{
