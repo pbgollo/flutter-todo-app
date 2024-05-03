@@ -8,10 +8,13 @@ import 'package:trabalho_1/model/usuario.dart';
 import 'package:trabalho_1/services/auth_service.dart';
 
 class UsuarioController {
-  final BancoHelper _bancoHelper = BancoHelper.instance; 
+  final BancoHelper _bancoHelper = BancoHelper.instance;
   final AuthService _authService = AuthService();
-  late final LocalAuthentication biometria;
-  bool suportaBiometria = false;
+  late LocalAuthentication _biometria;
+
+  UsuarioController() {
+    _biometria = LocalAuthentication();
+  }
 
   // Método para validar o usuário
   Future<bool> validarUsuario(String nomeUsuario, String senha) async {
@@ -157,34 +160,38 @@ class UsuarioController {
     }
   }
 
-  // Verifica se o usuário está com a biometria ativa e solicita-a
-  void verificaSeguranca(Usuario usuario) async {
+  // Verifica se o usuário está com a biometria ativa
+  Future<bool> verificaSeguranca(Usuario usuario) async {
     if (usuario.seguranca != null && usuario.seguranca == 1) {
-      try {
-        biometria = LocalAuthentication();
-        biometria.getAvailableBiometrics();
-        bool autenticado = await biometria.authenticate(
-          localizedReason: "Teste",
-          options: const AuthenticationOptions(
-            stickyAuth: true,
-            biometricOnly: true,
-          ),
-        );
-        
-        if (autenticado) {
-          print("Usuário autenticado com sucesso!");
-        } else {
-          print("Autenticação biométrica falhou.");
-        }
-      } catch (e) {
-        print("Erro durante a autenticação biométrica: $e");
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> solicitaBiometria() async {
+    try {
+      _biometria.getAvailableBiometrics();
+      bool autenticado = await _biometria.authenticate(
+        localizedReason: "Biometria ativada para sua conta.",
+        options: const AuthenticationOptions(
+          stickyAuth: true,
+          biometricOnly: true,
+        ),
+       );
+       if (autenticado) {
+        return true;
+       } else {
+         return false;
       }
+    } catch (e) {
+       print("Erro durante a autenticação biométrica: $e");
+       return true;
     }
   }
 
   Future<bool> verificaSuporteBiometria() async {
-    biometria = LocalAuthentication();
-    bool suportaBiometria = await biometria.isDeviceSupported();
+    bool suportaBiometria = await _biometria.isDeviceSupported();
     if (suportaBiometria) {
       print("Dispositivo suporta biometria");
       return true;

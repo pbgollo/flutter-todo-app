@@ -7,6 +7,7 @@ import 'package:trabalho_1/components/botao_redes.dart';
 import 'package:trabalho_1/components/text_field.dart';
 import 'package:trabalho_1/control/usuario_controller.dart';
 import 'package:trabalho_1/model/usuario.dart';
+import 'package:trabalho_1/view/biometria_gui.dart';
 import 'package:trabalho_1/view/cadastro_gui.dart';
 import 'package:trabalho_1/view/principal_gui.dart';
 
@@ -89,25 +90,37 @@ class LoginPage extends StatelessWidget {
                     bool usuarioValido = await _usuarioController.validarUsuario(nomeUsuario, senha);
                     if (usuarioValido) {
                       Usuario usuario = (await _usuarioController.consultarUsuarioPorNome(nomeUsuario))!;
-                      _usuarioController.verificaSeguranca(usuario);            
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Center(child: Text('Login bem-sucedido!')),
-                          backgroundColor: Colors.green,
-                          behavior: SnackBarBehavior.floating,
-                          duration: Duration(seconds: 2),
-                        ),
-                      ); 
-                      Navigator.pushReplacement(
-                        context,
-                          PageTransition(
-                            child: PrincipalPage(usuario: usuario), 
-                            type: PageTransitionType.size,
-                            alignment: Alignment.center,
-                            duration: const Duration(milliseconds: 600),
-                            reverseDuration: const Duration(milliseconds: 600),
+                      bool possuiBiometria = await _usuarioController.verificaSeguranca(usuario);   
+                      if (possuiBiometria) {
+                        Navigator.pushReplacement(
+                          context,
+                            PageTransition(
+                              child: BiometricPage(usuario: usuario), 
+                              type: PageTransitionType.topToBottom,
+                              duration: const Duration(milliseconds: 600),
+                              reverseDuration: const Duration(milliseconds: 600),
+                            ),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Center(child: Text('Login bem-sucedido!')),
+                            backgroundColor: Colors.green,
+                            behavior: SnackBarBehavior.floating,
+                            duration: Duration(seconds: 2),
                           ),
-                      );
+                        ); 
+                        Navigator.pushReplacement(
+                          context,
+                            PageTransition(
+                              child: PrincipalPage(usuario: usuario), 
+                              type: PageTransitionType.size,
+                              alignment: Alignment.center,
+                              duration: const Duration(milliseconds: 600),
+                              reverseDuration: const Duration(milliseconds: 600),
+                            ),
+                        );
+                      }       
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
