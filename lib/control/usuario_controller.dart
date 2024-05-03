@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print
 
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:trabalho_1/database/banco_helper.dart';
@@ -93,6 +95,7 @@ class UsuarioController {
             usuario: user.email ?? '',
             senha: 'master',
             imagem: user.photoURL ?? '',
+            seguranca: 0,
           );
           await adicionarUsuario(novoUsuario);
           return novoUsuario;
@@ -111,7 +114,8 @@ class UsuarioController {
     _authService.logOut();
   }
 
-  Future<bool> atualizarImagemUsuario(String usuario, String novaImagem) async {
+  // Atualiza a imagem do usuário
+  Future<void> atualizarImagemUsuario(String usuario, String novaImagem) async {
     try {
       final Database db = await _bancoHelper.database;
 
@@ -119,21 +123,44 @@ class UsuarioController {
         'imagem': novaImagem,
       };
 
-      int rowsUpdated = await db.update(
+      await db.update(
         'usuario',
         updates,
         where: 'usuario = ?',
         whereArgs: [usuario],
-      );
+      );    
 
-      if (rowsUpdated > 0) {
-        return true;
-      } else {
-        return false;
-      }
+    } catch (e) {
+      print("Erro ao atualizar a imagem!");
+    }
+  }
+
+  // Atualiza a propriedade segurança
+  Future<void> atualizarSeguranca(String usuario, int seguranca) async {
+    try {
+      final Database db = await _bancoHelper.database;
+
+      Map<String, dynamic> updates = {
+        'seguranca': seguranca,
+      };
+
+      await db.update(
+        'usuario',
+        updates,
+        where: 'usuario = ?',
+        whereArgs: [usuario],
+      );    
       
     } catch (e) {
-      return false;
+      print("Erro ao atualizar a segurança!");
+    }
+  }
+
+  // Verifica se o usuário está com a biometria ativa
+  void verificaSeguranca(Usuario usuario) {
+    if(usuario.seguranca != null && usuario.seguranca == 1){
+      //Solicitar biometria
+      print("Solicitar biometria");
     }
   }
 

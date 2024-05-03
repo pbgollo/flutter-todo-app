@@ -4,6 +4,7 @@ class Usuario {
   String? usuario;
   String? senha;
   String? imagem;
+   int? seguranca;
   
   Usuario({
     this.id,
@@ -11,6 +12,7 @@ class Usuario {
     this.usuario,
     this.senha,
     this.imagem,
+    this.seguranca,
   });
   
   Map<String, Object?> toMap() {
@@ -20,6 +22,7 @@ class Usuario {
       'usuario': usuario,
       'senha': senha,
       'imagem': imagem,
+      'seguranca': seguranca,
     };
   }
 
@@ -30,6 +33,7 @@ class Usuario {
       usuario: map['usuario'] as String?,
       senha: map['senha'] as String?,
       imagem: map['imagem'] as String?,
+      seguranca: map['seguranca'] as int?,
     );
   }
 

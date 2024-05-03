@@ -53,7 +53,6 @@ class _PrincipalPageState extends State<PrincipalPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.grey[200],
@@ -699,6 +698,27 @@ class _PrincipalPageState extends State<PrincipalPage> {
                         reverseDuration: const Duration(milliseconds: 600),                 
                       ),
                     );
+                  },
+                ),
+                IconButton(
+                  color: () {
+                    if (widget.usuario.seguranca != null && widget.usuario.seguranca == 1) {
+                      return Colors.green; 
+                    } else {
+                      return Colors.red; 
+                    }
+                  }(),
+                  iconSize: 34, 
+                  icon: const Icon(Icons.fingerprint_rounded), 
+                  onPressed: () { 
+                    if (widget.usuario.seguranca != null && widget.usuario.seguranca == 1) {
+                      widget.usuario.seguranca = 0;
+                    } else {
+                      widget.usuario.seguranca = 1;
+                    }
+                    Navigator.pop(context);
+                    abrirModalUsuario(context, widget.usuario);
+                    _usuarioController.atualizarSeguranca(widget.usuario.usuario!, widget.usuario.seguranca!);          
                   },
                 ),
                 IconButton(

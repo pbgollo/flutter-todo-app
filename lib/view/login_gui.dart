@@ -87,7 +87,9 @@ class LoginPage extends StatelessWidget {
                     );
                   } else {
                     bool usuarioValido = await _usuarioController.validarUsuario(nomeUsuario, senha);
-                    if (usuarioValido) {              
+                    if (usuarioValido) {
+                      Usuario usuario = (await _usuarioController.consultarUsuarioPorNome(nomeUsuario))!;
+                      _usuarioController.verificaSeguranca(usuario);            
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Center(child: Text('Login bem-sucedido!')),
@@ -95,8 +97,7 @@ class LoginPage extends StatelessWidget {
                           behavior: SnackBarBehavior.floating,
                           duration: Duration(seconds: 2),
                         ),
-                      );
-                      Usuario usuario = (await _usuarioController.consultarUsuarioPorNome(nomeUsuario))!;
+                      ); 
                       Navigator.pushReplacement(
                         context,
                           PageTransition(
