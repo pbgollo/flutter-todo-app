@@ -158,6 +158,7 @@ class LoginPage extends StatelessWidget {
                     onTap: () async {
                       Usuario? usuario = await _usuarioController.signInWithGoogle();
                       if (usuario != null) {
+                        _usuarioController.verificaSeguranca(usuario); 
                         Navigator.pushReplacement(
                           context,
                           PageTransition(

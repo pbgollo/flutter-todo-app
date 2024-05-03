@@ -710,15 +710,40 @@ class _PrincipalPageState extends State<PrincipalPage> {
                   }(),
                   iconSize: 34, 
                   icon: const Icon(Icons.fingerprint_rounded), 
-                  onPressed: () { 
+                  onPressed: () async { 
                     if (widget.usuario.seguranca != null && widget.usuario.seguranca == 1) {
                       widget.usuario.seguranca = 0;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Center(child: Text('Biometria desativada com sucesso!')),
+                            backgroundColor: Colors.red,
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
                     } else {
-                      widget.usuario.seguranca = 1;
+                      bool possuiBiometria = await _usuarioController.verificaSuporteBiometria();  
+                      if (possuiBiometria){
+                        widget.usuario.seguranca = 1;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Center(child: Text('Biometria ativada com sucesso!')),
+                            backgroundColor: Colors.green,
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Center(child: Text('Este dispositivo não suporta biometria!')),
+                            backgroundColor: Colors.red,
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
+                      }
                     }
                     Navigator.pop(context);
                     abrirModalUsuario(context, widget.usuario);
-                    _usuarioController.atualizarSeguranca(widget.usuario.usuario!, widget.usuario.seguranca!);          
+                    _usuarioController.atualizarSeguranca(widget.usuario.usuario!, widget.usuario.seguranca!);         
                   },
                 ),
                 IconButton(

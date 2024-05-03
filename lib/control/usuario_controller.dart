@@ -1,8 +1,7 @@
-// ignore_for_file: avoid_print
-
-import 'dart:math';
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:trabalho_1/database/banco_helper.dart';
 import 'package:trabalho_1/model/usuario.dart';
@@ -11,6 +10,8 @@ import 'package:trabalho_1/services/auth_service.dart';
 class UsuarioController {
   final BancoHelper _bancoHelper = BancoHelper.instance; 
   final AuthService _authService = AuthService();
+  late final LocalAuthentication biometria;
+  bool suportaBiometria = false;
 
   // Método para validar o usuário
   Future<bool> validarUsuario(String nomeUsuario, String senha) async {
@@ -156,11 +157,40 @@ class UsuarioController {
     }
   }
 
-  // Verifica se o usuário está com a biometria ativa
-  void verificaSeguranca(Usuario usuario) {
-    if(usuario.seguranca != null && usuario.seguranca == 1){
-      //Solicitar biometria
-      print("Solicitar biometria");
+  // Verifica se o usuário está com a biometria ativa e solicita-a
+  void verificaSeguranca(Usuario usuario) async {
+    if (usuario.seguranca != null && usuario.seguranca == 1) {
+      try {
+        biometria = LocalAuthentication();
+        biometria.getAvailableBiometrics();
+        bool autenticado = await biometria.authenticate(
+          localizedReason: "Teste",
+          options: const AuthenticationOptions(
+            stickyAuth: true,
+            biometricOnly: true,
+          ),
+        );
+        
+        if (autenticado) {
+          print("Usuário autenticado com sucesso!");
+        } else {
+          print("Autenticação biométrica falhou.");
+        }
+      } catch (e) {
+        print("Erro durante a autenticação biométrica: $e");
+      }
+    }
+  }
+
+  Future<bool> verificaSuporteBiometria() async {
+    biometria = LocalAuthentication();
+    bool suportaBiometria = await biometria.isDeviceSupported();
+    if (suportaBiometria) {
+      print("Dispositivo suporta biometria");
+      return true;
+    } else {
+      print("Dispositivo não suporta biometria");
+      return false;
     }
   }
 

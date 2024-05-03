@@ -22,6 +22,7 @@ dependencies:
   audioplayers: ^5.0.0
   image_picker: ^1.1.1
   page_transition: ^2.1.0
+  local_auth: ^2.2.0
 
 dev_dependencies:
   flutter_test:
