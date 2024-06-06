@@ -163,7 +163,7 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 30),
-              // Botão do Google e GitHub
+              // Botão do Google
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -206,19 +206,6 @@ class LoginPage extends StatelessWidget {
                       }
                     },
                     imagePath: 'assets/images/google.png'
-                  ),
-                  const SizedBox(width: 20),
-                  SquareTile(
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Center(child: Text('Funcionalidade ainda não implementada!')),
-                          backgroundColor: Colors.red,
-                          behavior: SnackBarBehavior.floating,
-                        ),
-                      );
-                    },
-                    imagePath: 'assets/images/github.png'
                   ),
                 ],
               ),
