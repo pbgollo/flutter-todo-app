@@ -82,7 +82,7 @@ class _WeatherPageState extends State<WeatherPage> {
             const SizedBox(height: 110),      
             // Texto da temperatura
             Text(
-              ("${_weather?.temperatura.round()}°C").toUpperCase(),
+              ("${_weather?.temperatura.round() ?? "..."}°C").toUpperCase(),
               style: GoogleFonts.bebasNeue(
                 fontSize: 55,
                 fontWeight: FontWeight.bold, 

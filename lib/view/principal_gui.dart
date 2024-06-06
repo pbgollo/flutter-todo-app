@@ -771,6 +771,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
     if (pickedFile != null) {
       setState(() {
         widget.usuario.imagem = pickedFile.path;
+        print("Caminho da imagem: ${widget.usuario.imagem}");
         _usuarioController.atualizarImagemUsuario(widget.usuario.usuario!, pickedFile.path);
       });
     }
