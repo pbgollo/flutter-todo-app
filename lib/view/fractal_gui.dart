@@ -1,6 +1,9 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:trabalho_1/control/fractal_controller.dart';
 import 'package:trabalho_1/model/usuario.dart';
 import 'package:page_transition/page_transition.dart';
@@ -9,7 +12,7 @@ import 'package:trabalho_1/view/principal_gui.dart';
 class FractalPage extends StatefulWidget {
   final Usuario usuario;
 
-  const FractalPage({Key? key, required this.usuario}) : super(key: key);
+  const FractalPage({super.key, required this.usuario});
 
   @override
   _FractalPageState createState() => _FractalPageState();
@@ -18,26 +21,22 @@ class FractalPage extends StatefulWidget {
 class _FractalPageState extends State<FractalPage> {
   final FractalController _controller = FractalController();
   Uint8List? _imageBytes;
-  String _iterationsText = '';
   String _elapsedTimeText = '';
 
   @override
   void initState() {
     super.initState();
-    // Adiciona um listener para o FractalController
     _controller.addListener(_onControllerChange);
   }
 
   @override
   void dispose() {
-    _controller.dispose(); // Limpa o listener do FractalController
+    _controller.dispose();
     super.dispose();
   }
 
   void _onControllerChange() {
-    // Atualiza o estado do widget quando o FractalController mudar
     setState(() {
-      _iterationsText = 'Número de iterações: ${_controller.iterations}';
       _elapsedTimeText = 'Tempo decorrido: ${_controller.elapsedTime.inMilliseconds} ms';
     });
   }
@@ -45,12 +44,12 @@ class _FractalPageState extends State<FractalPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100], // Cor de fundo do Scaffold
+      backgroundColor: Colors.grey[250],
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(30.0),
         child: AppBar(
-          backgroundColor: Colors.transparent, // Cor transparente para a barra de navegação
-          elevation: 0, // Sem sombra
+          backgroundColor: Colors.transparent, 
+          elevation: 0, 
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
@@ -71,24 +70,43 @@ class _FractalPageState extends State<FractalPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text("Fractal de Julia",
+              style: GoogleFonts.bebasNeue(
+                fontSize: 45,
+                fontWeight: FontWeight.bold, 
+                color: Colors.grey[700], 
+              ),
+            ),
+            const SizedBox(height: 50),
             Container(
-              width: 380, // Largura do contêiner
-              height: 380, // Altura do contêiner
+              width: 380, 
+              height: 380,
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: const Color.fromARGB(255, 0, 0, 0), // Cor da borda
-                  width: 1.0, // Largura da borda
+                  color: const Color.fromARGB(255, 0, 0, 0), 
+                  width: 1.0,
                 ),
               ),
               child: Center(
                 child: _imageBytes == null
-                    ? const Text('Pressione o botão para gerar o fractal!')
+                    ? const Text('Pressione o botão para gerar o fractal',
+                        style: TextStyle(
+                        fontSize: 17.0, 
+                        fontWeight: FontWeight.bold,  
+                      ),
+                    )
                     : Image.memory(_imageBytes!),
               ),
             ),
-            const SizedBox(height: 20),
-            Text(_iterationsText),
-            Text(_elapsedTimeText),
+            const SizedBox(height: 15),
+            Text(
+              _elapsedTimeText,
+              style: const TextStyle(
+                fontSize: 16.0,  
+                fontWeight: FontWeight.bold,  
+              ),
+            ),
+            const SizedBox(height: 95),
           ],
         ),
       ),

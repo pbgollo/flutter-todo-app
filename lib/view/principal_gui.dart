@@ -109,7 +109,8 @@ class _PrincipalPageState extends State<PrincipalPage> {
             Row(
               children: [
                 IconButton(
-                  icon: const Icon(Icons.hub_rounded),
+                  icon: const Icon(Icons.dirty_lens),
+                  iconSize: 26,
                   color: Colors.black,
                   onPressed: () {
                     Navigator.pushReplacement(
@@ -124,8 +125,8 @@ class _PrincipalPageState extends State<PrincipalPage> {
                   },
                 ),
                 const SizedBox(
-                  height: 12,
-                  width: 12,
+                  height: 11,
+                  width: 11,
                 ),
                 // Ícone do perfil do usuário
                 GestureDetector(

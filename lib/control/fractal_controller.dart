@@ -8,7 +8,6 @@ import 'package:image/image.dart' as img;
 
 class FractalController with ChangeNotifier {
   ui.Image? fractalImage;
-  int iterations = 0;
   Duration elapsedTime = Duration.zero;
 
   final Random random = Random();
@@ -35,7 +34,6 @@ class FractalController with ChangeNotifier {
     final codec = await ui.instantiateImageCodec(result.imageData);
     final frame = await codec.getNextFrame();
     fractalImage = frame.image;
-    iterations = result.iterations;
 
     notifyListeners();
   }
@@ -69,7 +67,6 @@ class FractalController with ChangeNotifier {
 
       final img.Image image = img.Image(width, height);
       const int maxIter = 255;
-      int iterations = 0;
 
       final Stopwatch stopwatch = Stopwatch()..start();
 
@@ -83,7 +80,6 @@ class FractalController with ChangeNotifier {
             zy = 2.0 * zx * zy + cy;
             zx = tmp;
             i--;
-            iterations++;
           }
 
           int color = (255 * (i / maxIter)).toInt();
@@ -94,15 +90,14 @@ class FractalController with ChangeNotifier {
       Uint8List imageData = Uint8List.fromList(img.encodePng(image));
       final Duration elapsedTime = stopwatch.elapsed;
 
-      replyPort.send(FractalResult(iterations, imageData, elapsedTime));
+      replyPort.send(FractalResult(imageData, elapsedTime));
     });
   }
 }
 
 class FractalResult {
-  final int iterations;
   final Uint8List imageData;
   final Duration elapsedTime;
 
-  FractalResult(this.iterations, this.imageData, this.elapsedTime);
+  FractalResult(this.imageData, this.elapsedTime);
 }
