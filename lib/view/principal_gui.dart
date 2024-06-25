@@ -12,6 +12,7 @@ import 'package:trabalho_1/model/grupo.dart';
 import 'package:trabalho_1/model/usuario.dart';
 import 'package:trabalho_1/control/tarefa_controller.dart';
 import 'package:trabalho_1/control/grupo_controller.dart';
+import 'package:trabalho_1/view/fractal_gui.dart';
 import 'package:trabalho_1/view/login_gui.dart';
 import 'package:trabalho_1/view/weather_gui.dart';
 
@@ -104,13 +105,29 @@ class _PrincipalPageState extends State<PrincipalPage> {
                   fontWeight: FontWeight.w500
                 ),
             ),
-            // Ícone do perfil do usuário
+            // Botão do fractal
             Row(
               children: [
-                const SizedBox(
-                  height: 35,
-                  width: 35,
+                IconButton(
+                  icon: const Icon(Icons.hub_rounded),
+                  color: Colors.black,
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                    context,
+                    PageTransition(
+                      child: FractalPage(usuario: widget.usuario), 
+                      type: PageTransitionType.topToBottom,
+                      duration: const Duration(milliseconds: 600),
+                      reverseDuration: const Duration(milliseconds: 600),
+                    ),
+                  );
+                  },
                 ),
+                const SizedBox(
+                  height: 12,
+                  width: 12,
+                ),
+                // Ícone do perfil do usuário
                 GestureDetector(
                   onTap: () {
                     abrirModalUsuario(context, widget.usuario);
