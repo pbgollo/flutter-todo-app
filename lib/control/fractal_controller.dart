@@ -12,6 +12,7 @@ class FractalController with ChangeNotifier {
 
   final Random random = Random();
 
+  // Parâmetros conhecidos que produzem bons fractais de Julia
   final List<List<double>> knownGoodParams = [
     [-0.7, 0.27015],
     [0.355, 0.355],
@@ -20,6 +21,7 @@ class FractalController with ChangeNotifier {
     [-0.70176, -0.3842]
   ];
 
+  // Método para iniciar a geração do fractal
   Future<void> generateFractal() async {
     List<double> params = knownGoodParams[random.nextInt(knownGoodParams.length)];
     double cx = params[0];
@@ -27,9 +29,14 @@ class FractalController with ChangeNotifier {
 
     final Stopwatch stopwatch = Stopwatch()..start();
 
+    // Chama a função para calcular o fractal em um isolado
     final result = await computeJuliaFractalIsolate(800, 800, cx, cy);
 
+    // Tempo total de execução dos métodos
     elapsedTime = stopwatch.elapsed;
+
+    // Tempo apenas do cálculo do fractal
+    // elapsedTime = result.elapsedTime;
 
     final codec = await ui.instantiateImageCodec(result.imageData);
     final frame = await codec.getNextFrame();
@@ -38,7 +45,9 @@ class FractalController with ChangeNotifier {
     notifyListeners();
   }
 
+  // Função assíncrona para calcular o fractal em um isolado
   Future<FractalResult> computeJuliaFractalIsolate(int width, int height, double cx, double cy) async {
+
     ReceivePort receivePort = ReceivePort();
     await Isolate.spawn(_computeJuliaFractal, receivePort.sendPort);
 
@@ -54,6 +63,7 @@ class FractalController with ChangeNotifier {
     return result;
   }
 
+  // Função executada no isolado para calcular o fractal
   static void _computeJuliaFractal(SendPort sendPort) {
     ReceivePort receivePort = ReceivePort();
     sendPort.send(receivePort.sendPort);

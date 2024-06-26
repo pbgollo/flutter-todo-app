@@ -89,10 +89,11 @@ class _FractalPageState extends State<FractalPage> {
               ),
               child: Center(
                 child: _imageBytes == null
-                    ? const Text('Pressione o botão para gerar o fractal',
-                        style: TextStyle(
-                        fontSize: 17.0, 
-                        fontWeight: FontWeight.bold,  
+                    ? Text('Pressione o botão para gerar o fractal',
+                      style: GoogleFonts.bebasNeue(
+                        fontSize: 19,
+                        fontWeight: FontWeight.w400, 
+                        color: Colors.grey[600], 
                       ),
                     )
                     : Image.memory(_imageBytes!),
@@ -101,9 +102,10 @@ class _FractalPageState extends State<FractalPage> {
             const SizedBox(height: 15),
             Text(
               _elapsedTimeText,
-              style: const TextStyle(
-                fontSize: 16.0,  
-                fontWeight: FontWeight.bold,  
+              style: GoogleFonts.bebasNeue(
+                fontSize: 19,
+                fontWeight: FontWeight.w400, 
+                color: Colors.grey[600], 
               ),
             ),
             const SizedBox(height: 95),
