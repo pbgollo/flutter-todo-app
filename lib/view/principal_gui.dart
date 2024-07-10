@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print, use_build_context_synchronously
 
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -15,6 +16,8 @@ import 'package:trabalho_1/control/grupo_controller.dart';
 import 'package:trabalho_1/view/fractal_gui.dart';
 import 'package:trabalho_1/view/login_gui.dart';
 import 'package:trabalho_1/view/weather_gui.dart';
+import 'package:trabalho_1/services/notification_service.dart';
+import 'package:trabalho_1/main.dart';
 
 class PrincipalPage extends StatefulWidget {
   const PrincipalPage({super.key, required this.usuario});
@@ -25,7 +28,8 @@ class PrincipalPage extends StatefulWidget {
   State<PrincipalPage> createState() => _PrincipalPageState();
 }
 
-class _PrincipalPageState extends State<PrincipalPage> {
+class _PrincipalPageState extends State<PrincipalPage> 
+  with WidgetsBindingObserver {
   int _selectedIndex = 0;
 
   final tarefaPesquisaController = TextEditingController();
@@ -34,6 +38,7 @@ class _PrincipalPageState extends State<PrincipalPage> {
   final GrupoController grupoController = GrupoController();
   final UsuarioController _usuarioController = UsuarioController();
   final AudioPlayerController playerController = AudioPlayerController();
+  
   final imagePicker = ImagePicker();
 
   List<Tarefa> todoList = [];
@@ -42,8 +47,12 @@ class _PrincipalPageState extends State<PrincipalPage> {
 
   File? imageFile;
 
+  bool _notificationEnabled = false;
+
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    print(notificationService.user);
     super.initState();
     grupoController.buscarGrupoPorUsuario(widget.usuario).then((value) {
       groupList = value;
@@ -53,6 +62,8 @@ class _PrincipalPageState extends State<PrincipalPage> {
 
   @override
   Widget build(BuildContext context) {
+    notificationService.setUser(widget.usuario);
+    print(notificationService.user);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.grey[200],
@@ -775,6 +786,25 @@ class _PrincipalPageState extends State<PrincipalPage> {
                     Navigator.of(context).pop();
                   },
                 ),
+                // Botão de Notificação
+                IconButton(
+                  color:_notificationEnabled ? Colors.green : Colors.grey[700],
+                  iconSize: 36, 
+                  icon: const Icon(Icons.notifications_active_outlined), 
+                  onPressed: () {
+                    setState(() {
+                      _notificationEnabled = !_notificationEnabled;  
+                    });
+                    notificationService.toggleNotifications(_notificationEnabled);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Center(child: _notificationEnabled ? Text('Notificações habilitadas com sucesso!'): Text('Notificações desativadas com sucesso!')),
+                        backgroundColor: _notificationEnabled ? Colors.green : Colors.red,
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  },
+                ),
               ],
             ),
           ],
@@ -877,6 +907,5 @@ class _PrincipalPageState extends State<PrincipalPage> {
         );
       },
     );
-  }
-
+  } 
 }

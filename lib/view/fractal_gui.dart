@@ -10,9 +10,9 @@ import 'package:page_transition/page_transition.dart';
 import 'package:trabalho_1/view/principal_gui.dart';
 
 class FractalPage extends StatefulWidget {
-  final Usuario usuario;
+  final Usuario? usuario;
 
-  const FractalPage({super.key, required this.usuario});
+  const FractalPage({super.key, this.usuario});
 
   @override
   _FractalPageState createState() => _FractalPageState();
@@ -25,6 +25,7 @@ class _FractalPageState extends State<FractalPage> {
 
   @override
   void initState() {
+    print('FRACTAL USER: ${widget.usuario}');
     super.initState();
     _controller.addListener(_onControllerChange);
   }
@@ -43,6 +44,10 @@ class _FractalPageState extends State<FractalPage> {
 
   @override
   Widget build(BuildContext context) {
+    final Usuario? usuarioRecebido = ModalRoute.of(context)?.settings.arguments as Usuario?;
+
+    print("algum user: ${usuarioRecebido ?? widget.usuario}");
+    
     return Scaffold(
       backgroundColor: Colors.grey[250],
       appBar: PreferredSize(
@@ -56,7 +61,7 @@ class _FractalPageState extends State<FractalPage> {
               Navigator.pushReplacement(
                 context,
                 PageTransition(
-                  child: PrincipalPage(usuario: widget.usuario), 
+                  child: PrincipalPage(usuario: (usuarioRecebido ?? widget.usuario)!), 
                   type: PageTransitionType.bottomToTop,
                   duration: const Duration(milliseconds: 600),
                   reverseDuration: const Duration(milliseconds: 600),

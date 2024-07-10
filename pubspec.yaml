@@ -24,6 +24,8 @@ dependencies:
   page_transition: ^2.1.0
   local_auth: ^2.2.0
   image: ^3.0.0
+  flutter_local_notifications: ^13.0.0
+
 
 dev_dependencies:
   flutter_test:
