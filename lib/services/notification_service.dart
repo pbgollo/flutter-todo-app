@@ -16,12 +16,10 @@ class NotificationService {
 
   void toggleNotifications(bool enable) {
     isNotificationEnabled = enable;
-    print(enable);
     schedulePeriodicNotifications();
   }
 
   void executarResposta(NotificationResponse notificationResponse) async {
-    print('Response: ${notificationResponse.payload}');
     Usuario usuario = (await _usuarioController.consultarUsuarioPorNome(notificationResponse.payload!))!;
 
     chaveDeNavegacao.currentState?.pushNamed('/fractal', arguments: usuario);
@@ -48,14 +46,13 @@ class NotificationService {
     const title = 'Lembrete';
     var body = 'Não se esqueça de suas tarefas ${user.nome}!';
     if (isNotificationEnabled) {
-      print('Notificações adicionadas');
       await notificationsPlugin.periodicallyShow(
         0,
         title,
         body,
         RepeatInterval.everyMinute,
         await notificationDetails(),
-        payload: user.usuario, //teste inutil
+        payload: user.usuario, 
         androidAllowWhileIdle: true,
       );
       return notificationsPlugin.show(
@@ -63,10 +60,9 @@ class NotificationService {
         title,
         body, 
         await notificationDetails(), 
-        payload: user.usuario, //teste inutil
+        payload: user.usuario,
       );
     } else {
-      print('Notificações Removidas');
       await notificationsPlugin.cancel(0);
     }
   }

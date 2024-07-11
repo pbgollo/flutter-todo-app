@@ -28,7 +28,8 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       // Chama a tela de login
       home: LoginPage(),
-            //Usamos a chave de navegação para que o gerenciadorpush faça o controle das rotas e não se preocupe com o contexto
+      
+      //Usamos a chave de navegação para que o gerenciadorpush faça o controle das rotas e não se preocupe com o contexto
       navigatorKey: chaveDeNavegacao,
 
       //Relaçao Chave/Tela para a navegação

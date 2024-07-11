@@ -16,7 +16,6 @@ import 'package:trabalho_1/control/grupo_controller.dart';
 import 'package:trabalho_1/view/fractal_gui.dart';
 import 'package:trabalho_1/view/login_gui.dart';
 import 'package:trabalho_1/view/weather_gui.dart';
-import 'package:trabalho_1/services/notification_service.dart';
 import 'package:trabalho_1/main.dart';
 
 class PrincipalPage extends StatefulWidget {
@@ -52,7 +51,7 @@ class _PrincipalPageState extends State<PrincipalPage>
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
-    print(notificationService.user);
+
     super.initState();
     grupoController.buscarGrupoPorUsuario(widget.usuario).then((value) {
       groupList = value;
@@ -63,7 +62,7 @@ class _PrincipalPageState extends State<PrincipalPage>
   @override
   Widget build(BuildContext context) {
     notificationService.setUser(widget.usuario);
-    print(notificationService.user);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.grey[200],
@@ -790,7 +789,9 @@ class _PrincipalPageState extends State<PrincipalPage>
                 IconButton(
                   color:_notificationEnabled ? Colors.green : Colors.grey[700],
                   iconSize: 36, 
-                  icon: const Icon(Icons.notifications_active_outlined), 
+                    icon: Icon(
+                      _notificationEnabled ? Icons.notifications_active_outlined : Icons.notifications_off_outlined,
+                    ),
                   onPressed: () {
                     setState(() {
                       _notificationEnabled = !_notificationEnabled;  
@@ -798,11 +799,13 @@ class _PrincipalPageState extends State<PrincipalPage>
                     notificationService.toggleNotifications(_notificationEnabled);
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Center(child: _notificationEnabled ? Text('Notificações habilitadas com sucesso!'): Text('Notificações desativadas com sucesso!')),
+                        content: Center(child: _notificationEnabled ? const Text('Notificações habilitadas com sucesso!'): const Text('Notificações desativadas com sucesso!')),
                         backgroundColor: _notificationEnabled ? Colors.green : Colors.red,
                         behavior: SnackBarBehavior.floating,
                       ),
                     );
+                    Navigator.pop(context);
+                    abrirModalUsuario(context, widget.usuario);
                   },
                 ),
               ],

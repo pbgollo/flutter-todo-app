@@ -25,7 +25,6 @@ class _FractalPageState extends State<FractalPage> {
 
   @override
   void initState() {
-    print('FRACTAL USER: ${widget.usuario}');
     super.initState();
     _controller.addListener(_onControllerChange);
   }
@@ -45,8 +44,6 @@ class _FractalPageState extends State<FractalPage> {
   @override
   Widget build(BuildContext context) {
     final Usuario? usuarioRecebido = ModalRoute.of(context)?.settings.arguments as Usuario?;
-
-    print("algum user: ${usuarioRecebido ?? widget.usuario}");
     
     return Scaffold(
       backgroundColor: Colors.grey[250],
