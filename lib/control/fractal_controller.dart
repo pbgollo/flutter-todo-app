@@ -35,9 +35,6 @@ class FractalController with ChangeNotifier {
     // Tempo total de execução dos métodos
     elapsedTime = stopwatch.elapsed;
 
-    // Tempo apenas do cálculo do fractal
-    // elapsedTime = result.elapsedTime;
-
     final codec = await ui.instantiateImageCodec(result.imageData);
     final frame = await codec.getNextFrame();
     fractalImage = frame.image;
@@ -47,33 +44,33 @@ class FractalController with ChangeNotifier {
 
   // Função assíncrona para calcular o fractal em um isolado
   Future<FractalResult> computeJuliaFractalIsolate(int width, int height, double cx, double cy) async {
+    final receivePort = ReceivePort();
+    final isolate = await Isolate.spawn(_computeJuliaFractal, receivePort.sendPort);
 
-    ReceivePort receivePort = ReceivePort();
-    await Isolate.spawn(_computeJuliaFractal, receivePort.sendPort);
-
-    SendPort sendPort = await receivePort.first as SendPort;
-    ReceivePort responsePort = ReceivePort();
+    final sendPort = await receivePort.first as SendPort;
+    final responsePort = ReceivePort();
 
     sendPort.send([responsePort.sendPort, width, height, cx, cy]);
-    FractalResult result = await responsePort.first as FractalResult;
+    final result = await responsePort.first as FractalResult;
 
     receivePort.close();
     responsePort.close();
+    isolate.kill(priority: Isolate.immediate);  // Fecha o Isolate
 
     return result;
   }
 
   // Função executada no isolado para calcular o fractal
-  static void _computeJuliaFractal(SendPort sendPort) {
-    ReceivePort receivePort = ReceivePort();
+  static void _computeJuliaFractal(SendPort sendPort) async {
+    final receivePort = ReceivePort();
     sendPort.send(receivePort.sendPort);
 
-    receivePort.listen((message) {
-      SendPort replyPort = message[0] as SendPort;
-      int width = message[1] as int;
-      int height = message[2] as int;
-      double cx = message[3] as double;
-      double cy = message[4] as double;
+    await for (final message in receivePort) {
+      final replyPort = message[0] as SendPort;
+      final width = message[1] as int;
+      final height = message[2] as int;
+      final cx = message[3] as double;
+      final cy = message[4] as double;
 
       final img.Image image = img.Image(width, height);
       const int maxIter = 255;
@@ -97,11 +94,12 @@ class FractalController with ChangeNotifier {
         }
       }
 
-      Uint8List imageData = Uint8List.fromList(img.encodePng(image));
-      final Duration elapsedTime = stopwatch.elapsed;
+      final Uint8List imageData = Uint8List.fromList(img.encodePng(image));
+      final elapsedTime = stopwatch.elapsed;
 
       replyPort.send(FractalResult(imageData, elapsedTime));
-    });
+      receivePort.close();  // Fecha o ReceivePort no isolado
+    }
   }
 }
 
